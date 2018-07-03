@@ -13,6 +13,7 @@ import com.project.silas.gerenciadordesenhas.core.abstracts.ManagerAbstract;
 public class InicializacaoManager extends ManagerAbstract {
 
     private static final int LOADER_INICIALIZACAO = 1;
+    private static final int LOADER_BUSCA_USUARIOS = 2;
 
     private Context contexto;
     private InicializacaoBusiness inicializacaoBusiness;
@@ -23,11 +24,26 @@ public class InicializacaoManager extends ManagerAbstract {
         this.inicializacaoBusiness = new InicializacaoBusiness(this.contexto);
     }
 
-    public void inializarDados(final OperationListener<Boolean> operationListener) {
+    public void inializarDados(final OperationListener<Void> operationListener) {
         runViaSyncLoader(LOADER_INICIALIZACAO, new OperationListener<OperationResult>() {
             @Override
             public void onSuccess(OperationResult result) {
-                OperationResult<Boolean> retornoInicio = inicializacaoBusiness.criacaoBanco();
+                OperationResult<Void> retornoInicio = inicializacaoBusiness.criacaoBanco();
+
+                if (retornoInicio.getError() != null){
+                    operationListener.onError(retornoInicio.getError());
+                    return;
+                }
+                operationListener.onSuccess(retornoInicio.getResult());
+            }
+        }, operationListener);
+    }
+
+    public void buscaTotalUsuarios(final OperationListener<Integer> operationListener) {
+        runViaSyncLoader(LOADER_BUSCA_USUARIOS, new OperationListener<OperationResult>() {
+            @Override
+            public void onSuccess(OperationResult result) {
+                OperationResult<Integer> retornoInicio = inicializacaoBusiness.buscaTotalUsuarios();
 
                 if (retornoInicio.getError() != null){
                     operationListener.onError(retornoInicio.getError());

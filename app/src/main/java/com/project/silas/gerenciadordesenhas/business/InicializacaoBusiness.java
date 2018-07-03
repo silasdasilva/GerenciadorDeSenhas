@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
+import com.project.silas.gerenciadordesenhas.entity.Usuario;
 
 public class InicializacaoBusiness {
 
@@ -22,8 +23,8 @@ public class InicializacaoBusiness {
         this.contexto = context;
     }
 
-    public OperationResult<Boolean> criacaoBanco(){
-        OperationResult<Boolean> retornoInicio = new OperationResult<>();
+    public OperationResult<Void> criacaoBanco(){
+        OperationResult<Void> retornoInicio = new OperationResult<>();
 
         try {
             if (sqLiteOpenHelper == null) {
@@ -38,10 +39,8 @@ public class InicializacaoBusiness {
                         atualizacaoTabelas(oldVersion, newVersion);
                     }
                 };
-                retornoInicio.withResult(true);
-            } else {
-                retornoInicio.withResult(false);
             }
+            retornoInicio.withResult(null);
 
         } catch (Throwable error){
             error.printStackTrace();
@@ -63,12 +62,45 @@ public class InicializacaoBusiness {
 
     private void criacaoTabelasIniciais() {
         getDatabase().beginTransaction();
-        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS Usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), email VARCHAR(100), senha VARCHAR(50))");
-        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS Logins (id INTEGER PRIMARY KEY AUTOINCREMENT, url VARCHAR(200), usuario VARCHAR(100), senha VARCHAR(50))");
+        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS Usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeUsuario VARCHAR(100), emailUsuario VARCHAR(100), senhaUsuario VARCHAR(50), tokenUsuario VARCHAR(100))");
+        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS DadosLogin (id INTEGER PRIMARY KEY AUTOINCREMENT, urlSalva VARCHAR(200), idUsuario VARCHAR(100), emailSalvo VARCHAR(100), senhaSalva VARCHAR(50))");
         getDatabase().setTransactionSuccessful();
     }
 
     private void atualizacaoTabelas(int ultimaVersao, int novaVersao){
         //lógica de atualização quando houver
+        if (ultimaVersao < novaVersao){
+
+        }
+    }
+
+    public OperationResult<Integer> buscaTotalUsuarios (){
+        OperationResult<Integer> retornoUsuarios = new OperationResult<>();
+        Cursor cursor = null;
+        int totalUsuarios = 0;
+        try {
+            cursor = getDatabase().rawQuery(Query.GET_TOTAL_USUARIOS, null);
+
+            if (cursor.getCount() > 0){
+                cursor.moveToFirst();
+                totalUsuarios = cursor.getInt(cursor.getColumnIndex("total"));
+                Log.i("inicialBusiness", "Total retornado do banco: " + totalUsuarios);
+            }
+
+            retornoUsuarios.withResult(totalUsuarios);
+        } catch (Throwable error){
+            error.printStackTrace();
+            Log.i("inicialBusiness", "Erro ao buscar usuários. Mensagem: " + error.getMessage());
+            retornoUsuarios.withError(error);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return retornoUsuarios;
+    }
+
+    public interface Query {
+
+        String GET_TOTAL_USUARIOS = "SELECT COUNT(*) AS total FROM " + Usuario.Metadata.TABLE_NAME
+                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_SENHA + " != 'null'";
     }
 }
