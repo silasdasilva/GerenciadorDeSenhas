@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_customdialog_defaultTitle">ATENÇÃO</string>
+    <string name="core_customdialog_defaultOkButton">OK</string>
+    <string name="core_customdialog_defaultCancelButton">Cancelar</string>
+    <string name="core_customdialog_defaultProgressmessage">Aguarde... carregando!</string>
+</resources>

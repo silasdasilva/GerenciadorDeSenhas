@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Alerts-->
+    <string name="st_mensagem_sair_tela_principal">Tem certeza que deseja sair do seu login?</string>
+    <string name="st_alerta_tela_principal">ATENÇÃO!</string>
+    <string name="st_sim_tela_principal">Sim</string>
+    <string name="st_nao_tela_principal">Não</string>
+
+</resources>

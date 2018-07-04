@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="st_nome_cadastro_usuarios">"Digite um nome: </string>
+    <string name="st_email_cadastro_usuarios">"Digite um e-mail: </string>
+    <string name="st_senha_cadastro_usuarios">"Digite uma senha: </string>
+
+    <string name="st_salvar_cadastro_usuarios">"Salvar</string>
+    <string name="st_cancelar_cadastro_usuarios">"Cancelar</string>
+
+    <!--Alerts-->
+    <string name="st_mensagem_sair_cadastro_usuarios">Tem certeza que deseja voltar? As alterações não serão salvas.</string>
+    <string name="st_alerta_cadastro_usuarios">ATENÇÃO!</string>
+    <string name="st_sim_cadastro_usuarios">Sim</string>
+    <string name="st_nao_cadastro_usuarios">Não</string>
+
+</resources>

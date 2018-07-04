@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="st_email_login_usuarios">"Digite o e-mail de login: </string>
+    <string name="st_senha_login_usuarios">"Digite a senha de acesso: </string>
+    <string name="st_cadastrar_login_usuarios">Clique aqui para cadastrar novo Usuário</string>
+
+    <string name="st_entrar_login_usuarios">"Entrar</string>
+    <string name="st_sair_login_usuarios">"Sair</string>
+
+    <!--Alerts-->
+    <string name="st_mensagem_sair_login_usuarios">Tem certeza que deseja sair do Aplicativo?</string>
+    <string name="st_alerta_login_usuarios">ATENÇÃO!</string>
+    <string name="st_sim_login_usuarios">Sim</string>
+    <string name="st_nao_login_usuarios">Não</string>
+
+</resources>

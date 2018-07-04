@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import com.project.silas.gerenciadordesenhas.core.annotations.IgnorePersistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario implements Parcelable {
@@ -16,7 +17,7 @@ public class Usuario implements Parcelable {
     private String senhaUsuario;
     private String tokenUsuario;
 
-    private List<String> listaUrlsUsuario;
+    private List<String> listaSites;
 
     private Usuario(Parcel in){
         this.id = in.readLong();
@@ -24,8 +25,10 @@ public class Usuario implements Parcelable {
         this.emailUsuario = in.readString();
         this.senhaUsuario = in.readString();
         this.tokenUsuario = in.readString();
-        in.readList(getListaUrlsUsuario(), ClassLoader.getSystemClassLoader());
+        in.readList(getListaSites(), ClassLoader.getSystemClassLoader());
     }
+
+    public Usuario() {}
 
     public static final Parcelable.Creator<Usuario> CREATOR = new Parcelable.Creator<Usuario>() {
         public Usuario createFromParcel(Parcel in) {
@@ -38,11 +41,17 @@ public class Usuario implements Parcelable {
     };
 
     public Usuario (Cursor cursor){
-        id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
-        nomeUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_NOME));
-        emailUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_EMAIL));
-        senhaUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_SENHA));
-        tokenUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_TOKEN));
+        try {
+            this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
+        } catch (Throwable error){
+            this.id = cursor.getLong(cursor.getColumnIndex(Metadata.PK_ALIAS));
+        }
+        this.nomeUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_NOME));
+        this.emailUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_EMAIL));
+        this.senhaUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_SENHA));
+        this.tokenUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_TOKEN));
+
+        this.listaSites = new ArrayList<>();
     }
 
     public long getId() {
@@ -91,12 +100,12 @@ public class Usuario implements Parcelable {
     }
 
     @IgnorePersistence
-    public List<String> getListaUrlsUsuario() {
-        return listaUrlsUsuario;
+    public List<String> getListaSites() {
+        return listaSites;
     }
 
-    public Usuario setListaUrlsUsuario(List<String> listaUrlsUsuario) {
-        this.listaUrlsUsuario = listaUrlsUsuario;
+    public Usuario setListaSites(List<String> listaSites) {
+        this.listaSites = listaSites;
         return this;
     }
 
@@ -112,19 +121,19 @@ public class Usuario implements Parcelable {
         parcel.writeString(this.emailUsuario);
         parcel.writeString(this.senhaUsuario);
         parcel.writeString(this.tokenUsuario);
-        parcel.writeList(this.listaUrlsUsuario);
+        parcel.writeList(this.listaSites);
     }
 
     public interface Metadata {
-        public static final String TABLE_NAME = "Usuario";
-        public static final String TABLE_ALIAS = "u";
-        public static final String PK = "id";
-        public static final String PK_ALIAS = "idUsuario";
-        public static final String FIELD_ID = "id";
-        public static final String FIELD_NOME = "nomeUsuario";
-        public static final String FIELD_EMAIL = "emailUsuario";
-        public static final String FIELD_SENHA = "senhaUsuario";
-        public static final String FIELD_TOKEN = "tokenUsuario";
-        public static final String ORDER_BY = "nomeUsuario ASC";
+        String TABLE_NAME = "Usuarios";
+        String TABLE_ALIAS = "u";
+        String PK = "id";
+        String PK_ALIAS = "idUsuario";
+        String FIELD_ID = "id";
+        String FIELD_NOME = "nomeUsuario";
+        String FIELD_EMAIL = "emailUsuario";
+        String FIELD_SENHA = "senhaUsuario";
+        String FIELD_TOKEN = "tokenUsuario";
+        String ORDER_BY = "nomeUsuario ASC";
     }
 }

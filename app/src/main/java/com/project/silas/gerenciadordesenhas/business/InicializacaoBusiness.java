@@ -31,7 +31,7 @@ public class InicializacaoBusiness {
                 sqLiteOpenHelper = new SQLiteOpenHelper(this.contexto, NOME_BANCO_DE_DADOS, null, 1) {
                     @Override
                     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-                        criacaoTabelasIniciais();
+                        criacaoTabelasIniciais(sqLiteDatabase);
                     }
 
                     @Override
@@ -46,8 +46,6 @@ public class InicializacaoBusiness {
             error.printStackTrace();
             retornoInicio.withError(error);
             Log.i("inicialBusiness", "Erro ao inicializar. Mensagem: " + error.getMessage());
-        } finally {
-            if (getDatabase().inTransaction()) getDatabase().endTransaction();
         }
         return retornoInicio;
     }
@@ -60,11 +58,9 @@ public class InicializacaoBusiness {
         return sqLiteOpenHelper.getReadableDatabase();
     }
 
-    private void criacaoTabelasIniciais() {
-        getDatabase().beginTransaction();
-        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS Usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeUsuario VARCHAR(100), emailUsuario VARCHAR(100), senhaUsuario VARCHAR(50), tokenUsuario VARCHAR(100))");
-        getDatabase().execSQL("CREATE TABLE IF NOT EXISTS DadosLogin (id INTEGER PRIMARY KEY AUTOINCREMENT, urlSalva VARCHAR(200), idUsuario VARCHAR(100), emailSalvo VARCHAR(100), senhaSalva VARCHAR(50))");
-        getDatabase().setTransactionSuccessful();
+    private void criacaoTabelasIniciais(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, nomeUsuario VARCHAR(100), emailUsuario VARCHAR(100), senhaUsuario VARCHAR(50), tokenUsuario VARCHAR(100))");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Sites (id INTEGER PRIMARY KEY AUTOINCREMENT, urlSalva VARCHAR(200), idUsuario VARCHAR(100), emailSalvo VARCHAR(100), senhaSalva VARCHAR(50))");
     }
 
     private void atualizacaoTabelas(int ultimaVersao, int novaVersao){

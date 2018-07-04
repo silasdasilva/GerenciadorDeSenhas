@@ -1,5 +1,6 @@
 package com.project.silas.gerenciadordesenhas.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,17 +13,21 @@ import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
+import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.managers.InicializacaoManager;
 
 public class SplashScreenActivity extends AppCompatActivity{
 
     private InicializacaoManager inicializacaoManager;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_activity);
+
+        exibirProgressDialog();
 
         this.inicializacaoManager = new InicializacaoManager(this);
         this.inicializacaoManager.inializarDados(new OperationListener<Void>() {
@@ -62,6 +67,16 @@ public class SplashScreenActivity extends AppCompatActivity{
                 Toast.makeText(SplashScreenActivity.this, "Erro ao iniciar aplicativo!", Toast.LENGTH_SHORT).show();
             }
         });
+        this.progressDialog.dismiss();
         finish();
+    }
+
+    /**
+     * Exibe a caixa de loading com a mensagem padrão.
+     */
+    private void exibirProgressDialog(){
+        this.progressDialog = new CustomDialog(this).progress();
+        this.progressDialog.setMessage(getString(R.string.core_customdialog_defaultProgressmessage));
+        this.progressDialog.show();
     }
 }

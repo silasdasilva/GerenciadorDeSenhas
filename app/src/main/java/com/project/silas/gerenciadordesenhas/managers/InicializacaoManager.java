@@ -1,6 +1,7 @@
 package com.project.silas.gerenciadordesenhas.managers;
 
 import android.content.Context;
+import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
@@ -12,8 +13,7 @@ import com.project.silas.gerenciadordesenhas.core.abstracts.ManagerAbstract;
 
 public class InicializacaoManager extends ManagerAbstract {
 
-    private static final int LOADER_INICIALIZACAO = 1;
-    private static final int LOADER_BUSCA_USUARIOS = 2;
+    private static final int LOADER_BUSCA_USUARIOS = 1;
 
     private Context contexto;
     private InicializacaoBusiness inicializacaoBusiness;
@@ -24,33 +24,26 @@ public class InicializacaoManager extends ManagerAbstract {
         this.inicializacaoBusiness = new InicializacaoBusiness(this.contexto);
     }
 
-    public void inializarDados(final OperationListener<Void> operationListener) {
-        runViaSyncLoader(LOADER_INICIALIZACAO, new OperationListener<OperationResult>() {
-            @Override
-            public void onSuccess(OperationResult result) {
-                OperationResult<Void> retornoInicio = inicializacaoBusiness.criacaoBanco();
+    public OperationListener<Void> inializarDados(final OperationListener<Void> operationListener) {
+        OperationResult<Void> retornoInicio = inicializacaoBusiness.criacaoBanco();
 
-                if (retornoInicio.getError() != null){
-                    operationListener.onError(retornoInicio.getError());
-                    return;
-                }
-                operationListener.onSuccess(retornoInicio.getResult());
-            }
-        }, operationListener);
+        if (retornoInicio.getError() != null){
+            operationListener.onError(retornoInicio.getError());
+        } else {
+            operationListener.onSuccess(retornoInicio.getResult());
+        }
+        return operationListener;
+
     }
 
-    public void buscaTotalUsuarios(final OperationListener<Integer> operationListener) {
-        runViaSyncLoader(LOADER_BUSCA_USUARIOS, new OperationListener<OperationResult>() {
-            @Override
-            public void onSuccess(OperationResult result) {
-                OperationResult<Integer> retornoInicio = inicializacaoBusiness.buscaTotalUsuarios();
+    public OperationListener<Integer> buscaTotalUsuarios(final OperationListener<Integer> operationListener) {
+        OperationResult<Integer> retornoInicio = inicializacaoBusiness.buscaTotalUsuarios();
 
-                if (retornoInicio.getError() != null){
-                    operationListener.onError(retornoInicio.getError());
-                    return;
-                }
-                operationListener.onSuccess(retornoInicio.getResult());
-            }
-        }, operationListener);
+        if (retornoInicio.getError() != null){
+            operationListener.onError(retornoInicio.getError());
+        } else {
+            operationListener.onSuccess(retornoInicio.getResult());
+        }
+        return operationListener;
     }
 }
