@@ -2,6 +2,7 @@ package com.project.silas.gerenciadordesenhas.business;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -35,7 +36,7 @@ public class LoginUsuariosBusiness {
 
             cursor = this.banco.rawQuery(Query.BUSCA_USUARIOS_CADASTRADOS, new String[]{usuarioLogar.getEmailUsuario()});
 
-            if (cursor == null) throw new LoginException("Este e-mail não pertence a nenhum Usuário. Tente novamente!");
+            if (cursor == null || cursor.getCount() <= 0 || cursor instanceof CursorIndexOutOfBoundsException) throw new LoginException("Este e-mail não pertence a nenhum Usuário. Tente novamente!");
 
             cursor.moveToFirst();
             Usuario usuario = new Usuario(cursor);

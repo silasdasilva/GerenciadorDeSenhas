@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Alerts-->
+    <string name="st_mensagem_sair_cadastro_site">Tem certeza que deseja voltar? As informações serão perditas!</string>
+    <string name="st_mensagem_exclusao_site">Tem certeza que deseja excluir esse site?</string>
+    <string name="st_alerta_cadastro_site">ATENÇÃO!</string>
+    <string name="st_sim_cadastro_site">Sim</string>
+    <string name="st_nao_cadastro_site">Não</string>
+
+    <string name="st_title_cadastro_site">Cadastro de Site</string>
+
+    <string name="st_salvar_cadastro_site">Salvar</string>
+    <string name="st_cancelar_cadastro_site">Cancelar</string>
+
+    <string name="st_enuciado_url_cadastro_site">Url:</string>
+    <string name="st_enunciado_login_cadastro_site">Login:</string>
+    <string name="st_enunciado_senha_cadastro_site">Senha:</string>
+
+</resources>

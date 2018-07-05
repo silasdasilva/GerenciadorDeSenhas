@@ -2,19 +2,22 @@ package com.project.silas.gerenciadordesenhas.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
+import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
+import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.InicializacaoManager;
+import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
+import com.project.silas.gerenciadordesenhas.ui.user.CadastroUsuariosActivity;
+import com.project.silas.gerenciadordesenhas.ui.user.LoginUsuariosActivity;
 
 public class SplashScreenActivity extends AppCompatActivity{
 
@@ -23,8 +26,8 @@ public class SplashScreenActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen_activity);
 
         exibirProgressDialog();
@@ -40,6 +43,13 @@ public class SplashScreenActivity extends AppCompatActivity{
                     @Override
                     public void onSuccess(Integer result) {
                         if (result > 0){
+                            if (SessionSingletonBusiness.getUsuario() != null){
+                                Usuario usuarioLogado = SessionSingletonBusiness.getUsuario();
+                                Log.i("inicialActivity", "O usuário " + usuarioLogado.getNomeUsuario() + " logado!");
+                                Toast.makeText(SplashScreenActivity.this, "Bem-vindo de volta Sr " + usuarioLogado.getNomeUsuario(), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SplashScreenActivity.this, TelaPrincipalActivity.class));
+                                return;
+                            }
                             Log.i("inicialActivity", "Já existem " + result + " Usuários cadastrados!");
                             Toast.makeText(SplashScreenActivity.this, "Faça seu login!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SplashScreenActivity.this, LoginUsuariosActivity.class));

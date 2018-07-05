@@ -5,11 +5,12 @@ package com.project.silas.gerenciadordesenhas.core;
  */
 public class OperationListener<T> {
 
-    public void onSuccess(T result){};
-    public void onError(Throwable error){};
+    public void onSuccess(T result){}
+
+    public void onError(Throwable error){}
 
     @SuppressWarnings({"UnusedParameter", "EmptyMethod"})
-    public void onProgress(Integer progress){};
+    public void onProgress(Integer progress){}
 
-    public void onCancel(){};
+    public void onCancel(){}
 }

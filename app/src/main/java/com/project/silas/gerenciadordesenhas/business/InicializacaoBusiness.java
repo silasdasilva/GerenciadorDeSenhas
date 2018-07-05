@@ -79,7 +79,7 @@ public class InicializacaoBusiness {
 
             if (cursor.getCount() > 0){
                 cursor.moveToFirst();
-                totalUsuarios = cursor.getInt(cursor.getColumnIndex("total"));
+                totalUsuarios = cursor.getCount();
                 Log.i("inicialBusiness", "Total retornado do banco: " + totalUsuarios);
             }
 
@@ -96,7 +96,6 @@ public class InicializacaoBusiness {
 
     public interface Query {
 
-        String GET_TOTAL_USUARIOS = "SELECT COUNT(*) AS total FROM " + Usuario.Metadata.TABLE_NAME
-                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_SENHA + " != 'null'";
+        String GET_TOTAL_USUARIOS = "SELECT * FROM " + Usuario.Metadata.TABLE_NAME;
     }
 }

@@ -37,10 +37,13 @@ public class Site implements Parcelable {
         }
     };
 
+    public Site (){}
+
     public Site (Cursor cursor){
         try {
             this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
         } catch (Throwable error){
+            error.printStackTrace();
             this.id = cursor.getLong(cursor.getColumnIndex(Metadata.PK_ALIAS));
         }
         this.idUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_ID_USUARIO));
@@ -127,9 +130,9 @@ public class Site implements Parcelable {
         String PK_ALIAS = "idSite";
         String FIELD_ID = "id";
         String FIELD_ID_USUARIO = "idUsuario";
-        String FIELD_URL = "urlSite";
-        String FIELD_LOGIN = "loginSite";
-        String FIELD_SENHA = "senhaSite";
+        String FIELD_URL = "urlSalva";
+        String FIELD_LOGIN = "emailSalvo";
+        String FIELD_SENHA = "senhaSalva";
         String ORDER_BY_ASC = "ASC";
         String ORDER_BY_DESC = "DESC";
     }

@@ -144,7 +144,7 @@ public abstract class DaoAbstract<T> implements AutoCloseable {
      * @throws InvocationTargetException
      */
     public int delete(T model) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        return this.database.delete(this.getTableName(), DEFAULT_FIELD_PK + "=?", new String[]{(String) this.getPrimaryKeyValue(model) });
+        return this.database.delete(this.getTableName(), DEFAULT_FIELD_PK + "=?", new String[]{this.getPrimaryKeyValue(model)});
     }
 
 
@@ -266,7 +266,7 @@ public abstract class DaoAbstract<T> implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (database.isOpen()) {
             //database.close();();
         }

@@ -44,6 +44,7 @@ public class Usuario implements Parcelable {
         try {
             this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
         } catch (Throwable error){
+            error.printStackTrace();
             this.id = cursor.getLong(cursor.getColumnIndex(Metadata.PK_ALIAS));
         }
         this.nomeUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_NOME));

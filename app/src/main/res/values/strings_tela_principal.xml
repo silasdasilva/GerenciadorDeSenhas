@@ -17,4 +17,7 @@
     <string name="st_login_item_tela_principal">Login:</string>
     <string name="st_senha_item_tela_principal">Senha:</string>
 
+    <string name="st_title_info_tela_principal">Informações</string>
+    <string name="st_info_tela_principal">Total de Sites</string>
+
 </resources>

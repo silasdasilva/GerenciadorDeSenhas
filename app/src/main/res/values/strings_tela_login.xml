@@ -8,7 +8,7 @@
     <string name="st_sair_login_usuarios">"Sair</string>
 
     <!--Alerts-->
-    <string name="st_mensagem_sair_login_usuarios">Tem certeza que deseja sair do Aplicativo?</string>
+    <string name="st_mensagem_sair_login_usuarios">Tem certeza que deseja sair?</string>
     <string name="st_alerta_login_usuarios">ATENÇÃO!</string>
     <string name="st_sim_login_usuarios">Sim</string>
     <string name="st_nao_login_usuarios">Não</string>

@@ -45,7 +45,8 @@ public class CadastroUsuariosBusiness {
             cursor = this.usuarioDao.rawQuery(Query.CONFERE_EXISTENCIA_EMAIL, new String[]{usuarioCadastro.getEmailUsuario()});
 
             //Verificar se alguém já está utilizando o e-mail
-            if (cursor.getCount() > 0) throw new CadastroException("Já existe um Usuário com esse email cadastrado");
+            cursor.moveToFirst();
+            if (cursor.getInt(cursor.getColumnIndex("verificacaoEmail")) > 0) throw new CadastroException("Já existe um Usuário com esse email cadastrado");
 
             /**
              * Verificação da senha
@@ -67,9 +68,9 @@ public class CadastroUsuariosBusiness {
 
             cursor = this.usuarioDao.rawQuery(Query.CONFERE_INSERCAO_USUARIO, new String[]{String.valueOf(idUsuario)});
 
-            if (cursor.getCount() <= 0) throw new CadastroException("Nenhum usuário cadastrado");
-
             cursor.moveToFirst();
+            if (cursor.getInt(cursor.getColumnIndex("verificacaoId")) <= 0) throw new CadastroException("Usuário não pôde ser cadastrado");
+
             Log.i("cadastroBusiness", "Número de usuários cadastrados: " + cursor.getCount());
             retornoCadastro.withResult(usuarioCadastro);
 
@@ -87,10 +88,10 @@ public class CadastroUsuariosBusiness {
     }
 
     public interface Query {
-        String CONFERE_EXISTENCIA_EMAIL = "SELECT COUNT(*) FROM " + Usuario.Metadata.TABLE_NAME
+        String CONFERE_EXISTENCIA_EMAIL = "SELECT COUNT(*) AS verificacaoEmail FROM " + Usuario.Metadata.TABLE_NAME
                 + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_EMAIL + " = ?";
 
-        String CONFERE_INSERCAO_USUARIO = "SELECT COUNT(*) FROM " + Usuario.Metadata.TABLE_NAME
+        String CONFERE_INSERCAO_USUARIO = "SELECT COUNT(*) AS verificacaoId FROM " + Usuario.Metadata.TABLE_NAME
                 + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " = ?";
     }
 }

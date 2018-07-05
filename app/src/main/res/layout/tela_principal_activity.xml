@@ -25,7 +25,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        app:menu_colorNormal="@color/colorPrimaryDark"
+        app:menu_colorNormal="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +63,9 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
-    <include android:id="@+id/cv_lista_vazia_tela_princpal" layout="@layout/lista_vazia"/>
+    <include
+        android:id="@+id/cv_lista_vazia_tela_princpal"
+        layout="@layout/lista_vazia"
+        android:visibility="invisible" />
 
 </android.support.constraint.ConstraintLayout>

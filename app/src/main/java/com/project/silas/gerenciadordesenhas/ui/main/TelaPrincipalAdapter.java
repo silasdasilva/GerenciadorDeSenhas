@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
@@ -39,18 +40,19 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
     @NonNull
     @Override
-    public TelaPrincipalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int parent) {
-        return new ViewHolder(LayoutInflater.from(this.contexto).inflate(R.layout.tela_principal_item_activity, parent, false);
+    public TelaPrincipalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.tela_principal_item_activity, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TelaPrincipalAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull TelaPrincipalAdapter.ViewHolder holder, int position) {
 
         Log.i("telaPrincipalAdapter", "Posição Retornada: " + position);
 
         if (this.cursor.getCount() > 0) {
             this.cursor.moveToPosition(position);
-            Site site = new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS))));
+            Site site = new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))
+                    .setUsuario(new Usuario(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Usuario.Metadata.PK_ALIAS))));
 
             holder.bindInspecao(site);
         }
@@ -85,8 +87,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
             if (this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)) == idSiteSelecionado){
                 setPosicaoClicada(this.cursor.getPosition());
                 setSiteSelecionado(new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))
-                        .setUsuario(new Usuario(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Usuario.Metadata.PK_ALIAS))));
-
+                        .setUsuario(new Usuario(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Usuario.Metadata.PK_ALIAS)))));
                 Log.i("telaPrincipalAdapter", "Site Selecionado: " + this.siteSelecionado.getId());
                 return;
             }
@@ -115,7 +116,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvItemUrlTelaPrincipal;
-        private TextView tvItemEmailTelaPrincipal;
+        private TextView tvItemLoginTelaPrincipal;
         private TextView tvItemSenhaTelaPrincipal;
         private Site site;
 
@@ -123,26 +124,27 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
             super(itemView);
 
             tvItemUrlTelaPrincipal = itemView.findViewById(R.id.tv_item_url_tela_principal);
-            tvItemEmailTelaPrincipal = itemView.findViewById(R.id.tv_item_email_tela_principal);
+            tvItemLoginTelaPrincipal = itemView.findViewById(R.id.tv_item_login_tela_principal);
             tvItemSenhaTelaPrincipal = itemView.findViewById(R.id.tv_item_senha_tela_principal);
         }
-    }
 
-    private void bindInspecao(Site site) {
-        this.site = site;
 
-        tvItemUrlTelaPrincipal.setText(site.getUrlSite);
-        tvItemEmailTelaPrincipal.setText(site.getEmailSite());
-        tvItemSenhaTelaPrincipal.setText(site.getSenhaSite());
+        private void bindInspecao(Site site) {
+            this.site = site;
 
-        customizarSelecao();
-    }
+            tvItemUrlTelaPrincipal.setText(site.getUrlSite());
+            tvItemLoginTelaPrincipal.setText(site.getLoginSite());
+            tvItemSenhaTelaPrincipal.setText(site.getSenhaSite());
 
-    private void customizarSelecao() {
-        if (getSiteSelecionado() != null && getSiteSelecionado().getId().equals(this.site.getId())){
-            this.itemView.setBackgroundColor(this.itemView.getResources().getColor(R.color.cardviewSelectedBackground));
-        } else {
-            this.itemView.setBackgroundColor(this.itemView.getResources().getColor(R.color.cardviewNormalBackground));
+            customizarSelecao();
         }
-    }*/
+
+        private void customizarSelecao() {
+            if (getSiteSelecionado() != null && getSiteSelecionado().getId() == this.site.getId()) {
+                this.itemView.setBackgroundColor(this.itemView.getResources().getColor(R.color.cardviewSelectedBackground));
+            } else {
+                this.itemView.setBackgroundColor(this.itemView.getResources().getColor(R.color.cardviewNormalBackground));
+            }
+        }
+    }
 }

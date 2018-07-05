@@ -21,11 +21,14 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.project.silas.gerenciadordesenhas.R;
+import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
+import com.project.silas.gerenciadordesenhas.ui.site.CadastroSiteActivity;
+import com.project.silas.gerenciadordesenhas.ui.utils.RecyclerItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +53,9 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     @BindView(R.id.cv_lista_vazia_tela_princpal)
     protected ConstraintLayout cvListaVaziaTelaPrincipal;
 
-    public static final String TAG_USUARIO_LOGADO = "usuarioLogado";
+    private static final int CODIGO_RETORNO_INSERCAO = 152;
+    private static final int CODIGO_RETORNO_ATUALIZACAO = 152;
+    private static final int CODIGO_RETORNO_EXCLUSAO = 153;
 
     private Usuario usuarioLogado;
     private TelaPrincipalAdapter adaptador;
@@ -61,6 +66,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     private String ultimaPesquisa = "";
     private int posicaoParaRolagem = 0;
     private int posicaoParaSelecionar = -1;
+    private AlertDialog.Builder alerta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +75,14 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         rvTelaPrincpal.setHasFixedSize(true);
 
-        if (getIntent().getExtras() != null){
-            this.usuarioLogado = getIntent().getParcelableExtra(TAG_USUARIO_LOGADO);
-            this.getSupportActionBar().setTitle(this.usuarioLogado.getNomeUsuario());
-        } else {
-            Toast.makeText(this, "erro ao carregar dados do Usuário", Toast.LENGTH_SHORT).show();
-            return;
+        if (SessionSingletonBusiness.getUsuario() != null){
+            this.usuarioLogado = SessionSingletonBusiness.getUsuario();
+            getSupportActionBar().setTitle(this.usuarioLogado.getNomeUsuario());
         }
 
         configuraLayoutAndAdapter();
 
-        rvTelaPrincpal.addOnItemTouchListener(new RecyclerView.OnItemTouchListener(), rvTelaPrincpal, new RecyclerItemClickListener.OnItemClickListener() {
+        rvTelaPrincpal.addOnItemTouchListener(new RecyclerItemClickListener(this, rvTelaPrincpal, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -115,18 +118,55 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             }
         });
 
+        fabInserirTelaPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
+                intent.putExtra(CadastroSiteActivity.CHAVE_INSERCAO_SITE, new Site());
+                startActivity(intent);
+            }
+        });
+
+        fabEditarTelaPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
+                intent.putExtra(CadastroSiteActivity.CHAVE_ATUALIZACAO_SITE, adaptador.getSiteSelecionado());
+                startActivity(intent);
+            }
+        });
+
+        fabExcluirTelaPrincipal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
+                intent.putExtra(CadastroSiteActivity.CHAVE_EXCLUSAO_SITE, adaptador.getSiteSelecionado());
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) { //configurando botão voltar
+            case android.R.id.home:
+                onBackPressed();//alerta se já tiver alteração de dados
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
         try {
 
-            AlertDialog.Builder alerta = new AlertDialog.Builder(this);
-            alerta.setTitle(getString(R.string.st_alerta_login_usuarios))
+            this.alerta = new AlertDialog.Builder(this);
+            this.alerta.setTitle(getString(R.string.st_alerta_login_usuarios))
                     .setMessage(getString(R.string.st_mensagem_sair_login_usuarios))
                     .setPositiveButton(getString(R.string.st_sim_login_usuarios), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            SessionSingletonBusiness.setUsuario(null);
                             finish();
                         }
                     })
@@ -148,13 +188,32 @@ public class TelaPrincipalActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CODIGO_RETORNO_INSERCAO && resultCode == CadastroSiteActivity.RESULT_OK) {
+            configuraLayoutAndAdapter();
+            Toast.makeText(TelaPrincipalActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
+
+        }
+        if (requestCode == CODIGO_RETORNO_ATUALIZACAO && resultCode == CadastroSiteActivity.RESULT_OK) {
+            configuraLayoutAndAdapter();
+            Toast.makeText(TelaPrincipalActivity.this, "Site atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+        }
+
+        if (requestCode == CODIGO_RETORNO_EXCLUSAO && resultCode == CadastroSiteActivity.RESULT_OK) {
+            configuraLayoutAndAdapter();
+            Toast.makeText(TelaPrincipalActivity.this, "Site excluído com sucesso!", Toast.LENGTH_SHORT).show();
+        }
+
+        if (requestCode == CadastroSiteActivity.RESULT_CANCELED){
+            Toast.makeText(TelaPrincipalActivity.this, "Operação cancelada pelo Usuário!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_info_sites_tela_principal, menu);
 
-        MenuItem menuItemPesquisa = menu.findItem(R.id.menu_servicos_rgn_pesquisar);
-        MenuItem menuItemInfo = menu.findItem(R.id.menu_servicos_rgn_info);
+        MenuItem menuItemPesquisa = menu.findItem(R.id.menu_tela_principal_pesquisar);
+        MenuItem menuItemInfo = menu.findItem(R.id.menu_tela_principal_info);
 
         final SearchView viewPesquisar = (SearchView) menuItemPesquisa.getActionView();
         viewPesquisar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -201,18 +260,17 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         menuItemInfo.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                int totalSites = adaptador.getItemCount();
 
-                Log.i("telaPrincipalActivity", "Total de Sites: " + totalSites);
+                Log.i("telaPrincipalActivity", "Total de Sites: " + adaptador.getItemCount());
 
                 Intent intent = new Intent(TelaPrincipalActivity.this, SitesInfoActivity.class);
-                intent.putExtra(SitesInfoActivity.CHAVE_INTENT_TOTALSITES, totalSites);
+                intent.putExtra(SitesInfoActivity.CHAVE_INTENT_TOTALSITES, adaptador.getItemCount());
                 startActivity(intent);
 
                 return false;
             }
         });
-        return super.onCreatePanelMenu(featureId, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -280,7 +338,6 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             public void onError(Throwable error) {
                 error.printStackTrace();
                 atualizaView();
-                Toast.makeText(TelaPrincipalActivity.this, "Erro ao carregar lista!", Toast.LENGTH_SHORT).show();
             }
         });
     }
