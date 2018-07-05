@@ -1,9 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.TelaPrincipalActivity">
+    tools:context=".ui.main.TelaPrincipalActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_tela_principal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fabmenu_tela_principal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:menu_colorNormal="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu_fab_label="@string/st_selecionar_tela_principal"
+        app:menu_fab_size="normal"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_labels_showShadow="true"
+        app:menu_openDirection="up">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_inserir_tela_principal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:fab_colorNormal="@color/colorPrimaryDark"
+            app:fab_label="@string/st_inserir_tela_principal" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_editar_tela_principal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:fab_colorNormal="@color/colorPrimaryDark"
+            android:src="@drawable/ic_add_circle_outline"
+            app:fab_label="@string/st_editar_tela_principal" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_excluir_tela_principal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mode_edit"
+            android:visibility="invisible"
+            app:fab_colorNormal="@color/colorPrimaryDark"
+            app:fab_label="@string/st_excluir_tela_principal" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <include android:id="@+id/cv_lista_vazia_tela_princpal" layout="@layout/lista_vazia"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.SplashScreenActivity"
+        <activity
+            android:name=".ui.SplashScreenActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +20,8 @@
         </activity>
         <activity android:name=".ui.CadastroUsuariosActivity" />
         <activity android:name=".ui.LoginUsuariosActivity" />
-        <activity android:name=".ui.TelaPrincipalActivity"></activity>
+        <activity android:name=".ui.main.TelaPrincipalActivity" />
+        <activity android:name=".ui.main.SitesInfoActivity"></activity>
     </application>
 
 </manifest>

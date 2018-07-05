@@ -18,6 +18,7 @@ public class CadastroUsuariosManager extends ManagerAbstract {
     public CadastroUsuariosManager(Context context) {
         super(context);
         this.contexto = context;
+        this.cadastroUsuariosBusiness = new CadastroUsuariosBusiness(this.contexto);
     }
 
     public void cadastrarUsuario (final Usuario usuarioCadastro, final OperationListener<Usuario> listenerCadastro){

@@ -15,6 +15,7 @@ import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.LoginUsuariosManager;
+import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +64,6 @@ public class LoginUsuariosActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginUsuariosActivity.this, TelaPrincipalActivity.class);
                         intent.putExtra(TelaPrincipalActivity.TAG_USUARIO_LOGADO, usuarioLogado);
                         startActivity(intent);
-                        finish();
                     }
 
                     @Override
@@ -79,7 +79,6 @@ public class LoginUsuariosActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginUsuariosActivity.this, CadastroUsuariosActivity.class));
-                finish();
             }
         });
 

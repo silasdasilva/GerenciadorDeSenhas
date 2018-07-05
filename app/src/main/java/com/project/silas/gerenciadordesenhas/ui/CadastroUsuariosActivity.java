@@ -14,6 +14,7 @@ import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.CadastroUsuariosManager;
+import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,14 +92,14 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
 
             AlertDialog.Builder alerta = new AlertDialog.Builder(this);
             alerta.setTitle(getString(R.string.st_alerta_login_usuarios))
-                    .setMessage(getString(R.string.st_mensagem_sair_login_usuarios))
-                    .setPositiveButton(getString(R.string.st_sim_login_usuarios), new DialogInterface.OnClickListener() {
+                    .setMessage(getString(R.string.st_mensagem_sair_cadastro_usuarios))
+                    .setPositiveButton(getString(R.string.st_sim_cadastro_usuarios), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
                     })
-                    .setNegativeButton(getString(R.string.st_nao_login_usuarios), new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.st_nao_cadastro_usuarios), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();

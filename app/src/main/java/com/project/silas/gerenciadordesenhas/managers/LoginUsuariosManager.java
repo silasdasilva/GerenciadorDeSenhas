@@ -16,6 +16,7 @@ public class LoginUsuariosManager extends ManagerAbstract {
     public LoginUsuariosManager(Context context) {
         super(context);
         this.contexto = context;
+        this.loginUsuariosBusiness = new LoginUsuariosBusiness(this.contexto);
     }
 
     public void efetuarLogin(Usuario usuarioLogar, OperationListener<Usuario> listenerLogin) {

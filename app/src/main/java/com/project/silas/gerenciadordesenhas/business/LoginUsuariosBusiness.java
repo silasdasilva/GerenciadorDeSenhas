@@ -28,12 +28,21 @@ public class LoginUsuariosBusiness {
             if (usuarioLogar.getEmailUsuario().equals("")) throw new LoginException("Digite um e-mail");
             if (usuarioLogar.getSenhaUsuario().equals("")) throw new LoginException("Digite uma senha");
 
+            Log.i("loginBusiness", "Confere caracteres digitados:\n"
+                    + "\nE-mail: " + usuarioLogar.getEmailUsuario()
+                    + "\nSenha: " + usuarioLogar.getSenhaUsuario()
+            );
+
             cursor = this.banco.rawQuery(Query.BUSCA_USUARIOS_CADASTRADOS, new String[]{usuarioLogar.getEmailUsuario()});
 
             if (cursor == null) throw new LoginException("Este e-mail não pertence a nenhum Usuário. Tente novamente!");
 
             cursor.moveToFirst();
             Usuario usuario = new Usuario(cursor);
+            Log.i("loginBusiness", "Confere caracteres banco:\n"
+                    + "\nE-mail: " + usuario.getEmailUsuario()
+                    + "\nSenha: " + usuario.getSenhaUsuario()
+            );
             if (!usuario.getSenhaUsuario().equals(usuarioLogar.getSenhaUsuario())) throw new LoginException("Senha incorreta!");
             retornoLogin.withResult(usuario);
 

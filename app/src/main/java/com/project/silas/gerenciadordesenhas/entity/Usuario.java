@@ -134,6 +134,7 @@ public class Usuario implements Parcelable {
         String FIELD_EMAIL = "emailUsuario";
         String FIELD_SENHA = "senhaUsuario";
         String FIELD_TOKEN = "tokenUsuario";
-        String ORDER_BY = "nomeUsuario ASC";
+        String ORDER_BY_ASC = "ASC";
+        String ORDER_BY_DESC = "DESC";
     }
 }

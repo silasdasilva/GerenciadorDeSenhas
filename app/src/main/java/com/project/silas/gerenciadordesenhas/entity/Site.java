@@ -130,6 +130,7 @@ public class Site implements Parcelable {
         String FIELD_URL = "urlSite";
         String FIELD_LOGIN = "loginSite";
         String FIELD_SENHA = "senhaSite";
-        String ORDER_BY = "urlSite ASC";
+        String ORDER_BY_ASC = "ASC";
+        String ORDER_BY_DESC = "DESC";
     }
 }

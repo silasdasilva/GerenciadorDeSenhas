@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo1" />
+        app:srcCompat="@drawable/logo" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/til_login_usuarios_email"
@@ -25,7 +25,6 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         android:hint="@string/st_email_login_usuarios"
-        app:hintAnimationEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,9 +34,9 @@
             android:id="@+id/tiet_login_usuarios_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
             android:imeOptions="flagNavigateNext"
-            style="@style/Theme.AppCompat.Light" />
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -57,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            style="@style/Theme.AppCompat.Light"/>
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

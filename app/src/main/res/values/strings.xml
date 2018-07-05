@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Gerenciador de Senhas</string>
+
+    <string name="empty_state_list_message">Nenhum login salvo!</string>
+    <string name="global_searchlabel">Pesquisar...</string>
+
 </resources>

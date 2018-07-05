@@ -35,6 +35,13 @@ public class CadastroUsuariosBusiness {
             if (usuarioCadastro.getEmailUsuario().equals("")) throw new CadastroException("Preencha seu e-mail!");
             if (usuarioCadastro.getSenhaUsuario().equals("")) throw new CadastroException("Preencha sua senha!");
 
+
+            Log.i("cadastroBusiness", "Confere caracteres digitados:\n"
+                    + "\nNome: " + usuarioCadastro.getNomeUsuario()
+                    + "\nE-mail: " + usuarioCadastro.getEmailUsuario()
+                    + "\nSenha: " + usuarioCadastro.getSenhaUsuario()
+            );
+
             cursor = this.usuarioDao.rawQuery(Query.CONFERE_EXISTENCIA_EMAIL, new String[]{usuarioCadastro.getEmailUsuario()});
 
             //Verificar se alguém já está utilizando o e-mail
@@ -51,9 +58,9 @@ public class CadastroUsuariosBusiness {
              * */
 
             if (usuarioCadastro.getSenhaUsuario().length() < 8) throw new CadastroException("A senha deve ter no mínimo 8 caracteres!");
-            if (!usuarioCadastro.getSenhaUsuario().matches("[0-9]{1,}")) throw new CadastroException("A senha deve conter ao menos 1 número");
-            if (!usuarioCadastro.getSenhaUsuario().matches("[A-Z|a-z]{1,}")) throw new CadastroException("A senha deve conter ao menos 1 letra");
-            if (!usuarioCadastro.getSenhaUsuario().matches("[^0-9A-Za-z]{1,}")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[A-Za-z]{1,}[0-9]*[^0-9A-Za-z]*")) throw new CadastroException("A senha deve conter ao menos 1 letra");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[0-9]{1,}[A-Za-z]*[^0-9A-Za-z]*")) throw new CadastroException("A senha deve conter ao menos 1 número");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[^0-9A-Za-z]{1,}[A-Za-z]*[0-9]*")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
 
             // Se tudo certo insere usuario
             long idUsuario = this.usuarioDao.insert(usuarioCadastro);
@@ -76,12 +83,12 @@ public class CadastroUsuariosBusiness {
             if (cursor != null) cursor.close();
             this.bancoDeDados.endTransaction();
         }
-        return null;
+        return retornoCadastro;
     }
 
     public interface Query {
         String CONFERE_EXISTENCIA_EMAIL = "SELECT COUNT(*) FROM " + Usuario.Metadata.TABLE_NAME
-                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_NOME + " = ?";
+                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_EMAIL + " = ?";
 
         String CONFERE_INSERCAO_USUARIO = "SELECT COUNT(*) FROM " + Usuario.Metadata.TABLE_NAME
                 + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " = ?";

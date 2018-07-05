@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/global_searchlabel"
+        android:id="@+id/menu_tela_principal_pesquisar"
+        android:icon="@drawable/ic_busca"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+
+    <item
+        android:title="Info"
+        android:id="@+id/menu_tela_principal_info"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_info"
+        app:showAsAction="always"/>
+</menu>
