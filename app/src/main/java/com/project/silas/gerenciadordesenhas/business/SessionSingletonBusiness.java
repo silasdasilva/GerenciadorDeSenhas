@@ -8,11 +8,11 @@ import com.project.silas.gerenciadordesenhas.entity.Usuario;
 public class SessionSingletonBusiness {
     private static Usuario usuario;
 
-    public static Usuario getUsuario() {
+    public synchronized static Usuario getUsuario() {
         return usuario;
     }
 
-    public static void setUsuario(Usuario usuario) {
+    public synchronized static void setUsuario(Usuario usuario) {
         SessionSingletonBusiness.usuario = usuario;
     }
 }

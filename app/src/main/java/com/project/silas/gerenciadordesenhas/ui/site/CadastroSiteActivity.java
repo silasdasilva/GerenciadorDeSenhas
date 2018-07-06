@@ -74,11 +74,10 @@ public class CadastroSiteActivity extends AppCompatActivity {
         if (getIntent().getExtras().get(CHAVE_ATUALIZACAO_SITE) != null) {
             this.chaveUsada = CHAVE_ATUALIZACAO_SITE;
             this.siteModificacao = getIntent().getParcelableExtra(CHAVE_ATUALIZACAO_SITE);
-            if (this.siteModificacao != null) {
-                tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
-                tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
-                tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
-            }
+
+            tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
+            tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
+            tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
         }
 
         if (getIntent().getExtras().get(CHAVE_EXCLUSAO_SITE) != null) {
@@ -95,7 +94,8 @@ public class CadastroSiteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (totalAlteracoes() == 3) {
-                    siteModificacao.setUrlSite(tietUrlCadastroSite.getText().toString())
+                    siteModificacao.setIdUsuario(String.valueOf(SessionSingletonBusiness.getUsuario()))
+                            .setUrlSite(tietUrlCadastroSite.getText().toString())
                             .setLoginSite(tietLoginCadastroSite.getText().toString())
                             .setSenhaSite(tietSenhaCadastroSite.getText().toString());
 
