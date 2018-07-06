@@ -53,9 +53,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     @BindView(R.id.cv_lista_vazia_tela_princpal)
     protected ConstraintLayout cvListaVaziaTelaPrincipal;
 
-    private static final int CODIGO_RETORNO_INSERCAO = 152;
-    private static final int CODIGO_RETORNO_ATUALIZACAO = 152;
-    private static final int CODIGO_RETORNO_EXCLUSAO = 153;
+    private static final int CODIGO_RETORNO_MODIFICACAO = 152;
 
     private Usuario usuarioLogado;
     private TelaPrincipalAdapter adaptador;
@@ -123,7 +121,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
                 intent.putExtra(CadastroSiteActivity.CHAVE_INSERCAO_SITE, new Site());
-                startActivity(intent);
+                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
             }
         });
 
@@ -132,7 +130,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
                 intent.putExtra(CadastroSiteActivity.CHAVE_ATUALIZACAO_SITE, adaptador.getSiteSelecionado());
-                startActivity(intent);
+                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
             }
         });
 
@@ -141,7 +139,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
                 intent.putExtra(CadastroSiteActivity.CHAVE_EXCLUSAO_SITE, adaptador.getSiteSelecionado());
-                startActivity(intent);
+                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
             }
         });
 
@@ -188,19 +186,8 @@ public class TelaPrincipalActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CODIGO_RETORNO_INSERCAO && resultCode == CadastroSiteActivity.RESULT_OK) {
+        if (requestCode == CODIGO_RETORNO_MODIFICACAO && resultCode == CadastroSiteActivity.RESULT_OK) {
             configuraLayoutAndAdapter();
-            Toast.makeText(TelaPrincipalActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
-
-        }
-        if (requestCode == CODIGO_RETORNO_ATUALIZACAO && resultCode == CadastroSiteActivity.RESULT_OK) {
-            configuraLayoutAndAdapter();
-            Toast.makeText(TelaPrincipalActivity.this, "Site atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-        }
-
-        if (requestCode == CODIGO_RETORNO_EXCLUSAO && resultCode == CadastroSiteActivity.RESULT_OK) {
-            configuraLayoutAndAdapter();
-            Toast.makeText(TelaPrincipalActivity.this, "Site excluído com sucesso!", Toast.LENGTH_SHORT).show();
         }
 
         if (requestCode == CadastroSiteActivity.RESULT_CANCELED){

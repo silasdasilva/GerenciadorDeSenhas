@@ -34,7 +34,7 @@ public class CadastroSiteBusiness {
             cursor = this.siteDao.rawQuery(Query.CONFERE_EXISTENCIA_URL_E_LOGIN, new String[]{siteInsercao.getUrlSite(), siteInsercao.getLoginSite()});
 
             cursor.moveToFirst();
-            if (cursor.getInt(cursor.getColumnIndex("verificaExistencia")) > 0) throw new CadastroException("Já existe esse login para este usuário!");
+            if (cursor.getInt(cursor.getColumnIndex("verificaExistencia")) > 0) throw new CadastroException("Já existe esse site para este usuário!");
 
             long idSite = this.siteDao.insert(siteInsercao);
 
