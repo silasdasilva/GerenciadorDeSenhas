@@ -38,26 +38,29 @@ public class TelaPrincipalBusiness {
 
             Log.i("telaPrincipalBusiness", "Qtde de registros: " + cursor.getCount());
 
+            cursor.moveToFirst();
+            Site site = new Site(cursor);
+
+            Log.i("confereCursor", "\nSite\n"
+                    + "\nidSite: " + site.getId()
+                    + "\nIdUsuário: " + site.getIdUsuario()
+                    + "\nUrl: " + site.getUrlSite()
+                    + "\nLogin: " + site.getLoginSite()
+                    + "\nSenha: " + site.getSenhaSite()
+            );
+
             retornoSites.withResult(cursor);
 
         } catch (Throwable error){
             error.printStackTrace();
             Log.i("telaPrincipalBusiness", "Erro ao carregar sites. Mensagem: " + error.getMessage());
             retornoSites.withError(error);
-        } finally {
-            if (cursor != null) cursor.close();
         }
         return retornoSites;
     }
 
     public interface Query {
-        String BUSCA_SITES_USUARIO = "SELECT " + Usuario.Metadata.TABLE_NAME + ".*"
-                + ", " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " AS " + Usuario.Metadata.PK_ALIAS
-                + ", " + Site.Metadata.TABLE_NAME + ".*"
-                + ", " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID + " AS " + Site.Metadata.PK_ALIAS
-                + " FROM " + Usuario.Metadata.TABLE_NAME
-                + " INNER JOIN " + Site.Metadata.TABLE_ALIAS
-                + " ON " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " = " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO
+        String BUSCA_SITES_USUARIO = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO + " = ?"
                 + " AND (" + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_URL + " LIKE ?"
                 + " OR " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_LOGIN + " LIKE ?"

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.project.silas.gerenciadordesenhas.R;
+import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
@@ -34,8 +35,10 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
     @Override
     public long getItemId(int position) {
+        if (this.getItemCount() <= 0 || position < 0) return -1;
         this.cursor.moveToPosition(position);
-        return new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS))).getId();
+        if (this.cursor.isAfterLast()) this.cursor.moveToPrevious();
+        return (new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))).getId();
     }
 
     @NonNull
@@ -51,8 +54,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
         if (this.cursor.getCount() > 0) {
             this.cursor.moveToPosition(position);
-            Site site = new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))
-                    .setUsuario(new Usuario(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Usuario.Metadata.PK_ALIAS))));
+            Site site = new Site(this.cursor).setUsuario(SessionSingletonBusiness.getUsuario());
 
             holder.bindInspecao(site);
         }
@@ -60,7 +62,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
     @Override
     public int getItemCount() {
-        return this.cursor != null ? this.cursor.getCount() : 0;
+        return this.cursor == null ? 0 : this.cursor.getCount();
     }
 
     public void preencheLista(Usuario usuarioLogado, String queryPesquisa, final OperationListener<Void> listener) {
@@ -86,8 +88,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
         while (!this.cursor.isAfterLast()){
             if (this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)) == idSiteSelecionado){
                 setPosicaoClicada(this.cursor.getPosition());
-                setSiteSelecionado(new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))
-                        .setUsuario(new Usuario(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Usuario.Metadata.PK_ALIAS)))));
+                setSiteSelecionado(new Site(this.cursor).setUsuario(SessionSingletonBusiness.getUsuario()));
                 Log.i("telaPrincipalAdapter", "Site Selecionado: " + this.siteSelecionado.getId());
                 return;
             }
