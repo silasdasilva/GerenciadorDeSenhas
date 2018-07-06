@@ -10,6 +10,8 @@ import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
 import com.project.silas.gerenciadordesenhas.repository.UsuarioDao;
 
+import java.util.Date;
+
 public class CadastroUsuariosBusiness {
 
     private Context contexto;
@@ -64,9 +66,21 @@ public class CadastroUsuariosBusiness {
             if (!usuarioCadastro.getSenhaUsuario().matches(".*[^0-9A-Za-z]{1,}[A-Za-z]*[0-9]*")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
 
             // Se tudo certo insere usuario
+
+            String timeStamp = String.valueOf(new Date().getTime());
+            String emailUsuario = usuarioCadastro.getEmailUsuario();
+            String token = "";
+
+            for (int posicao = 0; posicao < timeStamp.length(); posicao++) {
+                token = emailUsuario.substring(posicao, posicao + 1) + timeStamp.substring(posicao, posicao + 1);
+            }
+
+            Log.i("cadastroBusiness", "Token: " + token);
+            usuarioCadastro.setTokenUsuario(token);
+
             long idUsuario = this.usuarioDao.insert(usuarioCadastro);
 
-            cursor = this.usuarioDao.rawQuery(Query.CONFERE_INSERCAO_USUARIO, new String[]{String.valueOf(idUsuario)});
+            cursor = this.usuarioDao.rawQuery(Query.CONFERE_EXISTENCIA_ID, new String[]{String.valueOf(idUsuario)});
 
             cursor.moveToFirst();
             if (cursor.getInt(cursor.getColumnIndex("verificacaoId")) <= 0) throw new CadastroException("Usuário não pôde ser cadastrado");
@@ -88,10 +102,17 @@ public class CadastroUsuariosBusiness {
     }
 
     public interface Query {
+        String CONFERE_EXISTENCIA_ID = "SELECT COUNT(*) AS verificacaoId FROM " + Usuario.Metadata.TABLE_NAME
+                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " = ?";
+
         String CONFERE_EXISTENCIA_EMAIL = "SELECT COUNT(*) AS verificacaoEmail FROM " + Usuario.Metadata.TABLE_NAME
                 + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_EMAIL + " = ?";
 
-        String CONFERE_INSERCAO_USUARIO = "SELECT COUNT(*) AS verificacaoId FROM " + Usuario.Metadata.TABLE_NAME
-                + " WHERE " + Usuario.Metadata.TABLE_NAME + "." + Usuario.Metadata.FIELD_ID + " = ?";
+        String INSERCAO_USUARIO = "INSERT INTO " + Usuario.Metadata.TABLE_NAME
+                + " (" + Usuario.Metadata.FIELD_NOME
+                + ", " + Usuario.Metadata.FIELD_EMAIL
+                + ", " + Usuario.Metadata.FIELD_SENHA
+                + ", " + Usuario.Metadata.FIELD_TOKEN + ") "
+                + " VALUES (?,?,?,?)";
     }
 }

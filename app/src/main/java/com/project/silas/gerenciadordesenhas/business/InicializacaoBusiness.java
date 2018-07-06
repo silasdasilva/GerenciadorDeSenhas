@@ -59,8 +59,8 @@ public class InicializacaoBusiness {
     }
 
     private void criacaoTabelasIniciais(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE Usuario (id INTEGER NOT NULL PRIMARY KEY, nomeUsuario varchar(255) NOT NULL, emailUsuario varchar(255) NOT NULL UNIQUE, senhaUsuario varchar(255) NOT NULL UNIQUE, tokenUsuario varchar(255) NOT NULL UNIQUE);");
-        sqLiteDatabase.execSQL("CREATE TABLE Site (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, urlSite varchar(255), idUsuario bigint(19) NOT NULL, loginSite varchar(255) NOT NULL UNIQUE, senhaSite VARCHAR(255) NOT NULL UNIQUE);");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , nomeUsuario varchar(255) NOT NULL, emailUsuario varchar(255) NOT NULL, senhaUsuario varchar(255) NOT NULL, tokenUsuario varchar(255) UNIQUE NOT NULL);");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Site (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, urlSite varchar(255) NOT NULL, idUsuario bigint(19) NOT NULL, loginSite varchar(255) NOT NULL, senhaSite VARCHAR(255) NOT NULL);");
     }
 
     private void atualizacaoTabelas(int ultimaVersao, int novaVersao){
@@ -95,7 +95,6 @@ public class InicializacaoBusiness {
     }
 
     public interface Query {
-
         String GET_TOTAL_USUARIOS = "SELECT * FROM " + Usuario.Metadata.TABLE_NAME;
     }
 }

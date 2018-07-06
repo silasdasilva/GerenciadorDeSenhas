@@ -30,7 +30,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
         this.contexto = context;
         this.telaPrincipalManager = telaPrincipalManager;
         this.setHasStableIds(true);
-        preencheLista(usuarioLogado, queryPesquisa, listenerUI);
+        preencheLista(queryPesquisa, listenerUI);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
         if (this.getItemCount() <= 0 || position < 0) return -1;
         this.cursor.moveToPosition(position);
         if (this.cursor.isAfterLast()) this.cursor.moveToPrevious();
-        return (new Site(this.cursor).setId(this.cursor.getLong(this.cursor.getColumnIndex(Site.Metadata.PK_ALIAS)))).getId();
+        return new Site(this.cursor).getId();
     }
 
     @NonNull
@@ -65,8 +65,8 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
         return this.cursor == null ? 0 : this.cursor.getCount();
     }
 
-    public void preencheLista(Usuario usuarioLogado, String queryPesquisa, final OperationListener<Void> listener) {
-        this.telaPrincipalManager.buscarLogins(usuarioLogado, queryPesquisa, new OperationListener<Cursor>(){
+    public void preencheLista(String queryPesquisa, final OperationListener<Void> listener) {
+        this.telaPrincipalManager.buscarLogins(queryPesquisa, new OperationListener<Cursor>(){
             @Override
             public void onSuccess(Cursor result) {
                 cursor = result;

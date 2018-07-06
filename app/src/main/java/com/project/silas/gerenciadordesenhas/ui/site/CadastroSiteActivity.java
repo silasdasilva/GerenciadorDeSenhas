@@ -68,22 +68,21 @@ public class CadastroSiteActivity extends AppCompatActivity {
 
         if (getIntent().getExtras().get(CHAVE_INSERCAO_SITE) != null) {
             this.chaveUsada = CHAVE_INSERCAO_SITE;
-            this.siteModificacao = (Site) getIntent().getSerializableExtra(CHAVE_INSERCAO_SITE);
+            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_INSERCAO_SITE);
         }
 
         if (getIntent().getExtras().get(CHAVE_ATUALIZACAO_SITE) != null) {
             this.chaveUsada = CHAVE_ATUALIZACAO_SITE;
-            this.siteModificacao = (Site) getIntent().getSerializableExtra(CHAVE_ATUALIZACAO_SITE);
+            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_ATUALIZACAO_SITE);
         }
 
         if (getIntent().getExtras().get(CHAVE_EXCLUSAO_SITE) != null) {
             this.chaveUsada = CHAVE_EXCLUSAO_SITE;
-            this.siteModificacao = (Site) getIntent().getSerializableExtra(CHAVE_EXCLUSAO_SITE);
-            this.siteModificacao.setIdUsuario(String.valueOf(usuarioLogado.getId()));
+            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_EXCLUSAO_SITE);
             tvExclusaoCadastroSite.setVisibility(View.VISIBLE);
-            tietUrlCadastroSite.setVisibility(View.INVISIBLE);
-            tietLoginCadastroSite.setVisibility(View.INVISIBLE);
-            tietSenhaCadastroSite.setVisibility(View.INVISIBLE);
+            tietUrlCadastroSite.setVisibility(View.GONE);
+            tietLoginCadastroSite.setVisibility(View.GONE);
+            tietSenhaCadastroSite.setVisibility(View.GONE);
             btSalvarCadastroSite.setText(R.string.st_excluir_tela_principal);
         }
 
@@ -91,8 +90,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (totalAlteracoes() == 3) {
-                    siteModificacao.setIdUsuario(String.valueOf(usuarioLogado.getId()))
-                            .setUrlSite(tietUrlCadastroSite.getText().toString())
+                    siteModificacao.setUrlSite(tietUrlCadastroSite.getText().toString())
                             .setLoginSite(tietLoginCadastroSite.getText().toString())
                             .setSenhaSite(tietSenhaCadastroSite.getText().toString());
 

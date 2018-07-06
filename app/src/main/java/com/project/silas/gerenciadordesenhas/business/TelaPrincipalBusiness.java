@@ -15,39 +15,29 @@ public class TelaPrincipalBusiness {
 
     private Context contexto;
     private SQLiteDatabase bancoDados;
-    private UsuarioDao usuarioDao;
     private SiteDao siteDao;
+
+    private Usuario usuarioLogado;
 
     public TelaPrincipalBusiness (Context context){
         this.contexto = context;
         this.bancoDados = InicializacaoBusiness.getDatabase();
-        this.usuarioDao = new UsuarioDao(this.bancoDados);
         this.siteDao = new SiteDao(this.bancoDados);
+        this.usuarioLogado = SessionSingletonBusiness.getUsuario();
     }
 
-    public OperationResult<Cursor> buscarLogins(Usuario usuarioLogado, String queryPesquisa) {
+    public OperationResult<Cursor> buscarLogins(String queryPesquisa) {
 
         OperationResult<Cursor> retornoSites = new OperationResult<>();
         String pesquisa = "%" + queryPesquisa + "%";
         Cursor cursor = null;
 
         try {
-            cursor = this.usuarioDao.rawQuery(Query.BUSCA_SITES_USUARIO, new String[]{
-                    String.valueOf(usuarioLogado.getId()), pesquisa, pesquisa
+            cursor = this.siteDao.rawQuery(Query.BUSCA_SITES_USUARIO, new String[]{
+                    String.valueOf(this.usuarioLogado.getId()), pesquisa, pesquisa
             });
 
             Log.i("telaPrincipalBusiness", "Qtde de registros: " + cursor.getCount());
-
-            cursor.moveToFirst();
-            Site site = new Site(cursor);
-
-            Log.i("confereCursor", "\nSite\n"
-                    + "\nidSite: " + site.getId()
-                    + "\nIdUsuário: " + site.getIdUsuario()
-                    + "\nUrl: " + site.getUrlSite()
-                    + "\nLogin: " + site.getLoginSite()
-                    + "\nSenha: " + site.getSenhaSite()
-            );
 
             retornoSites.withResult(cursor);
 

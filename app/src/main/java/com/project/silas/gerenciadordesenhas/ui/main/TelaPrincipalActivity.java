@@ -207,7 +207,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(final String query) {
                 exibirProgressDialog();
-                adaptador.preencheLista(usuarioLogado, query, new OperationListener<Void>() {
+                adaptador.preencheLista(query, new OperationListener<Void>() {
                     @Override
                     public void onSuccess(Void result) {
                         ultimaPesquisa = query;
@@ -342,8 +342,8 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             cvListaVaziaTelaPrincipal.setVisibility(View.VISIBLE);
             rvTelaPrincpal.setVisibility(View.INVISIBLE);
             fabMenuTelaPrincipal.close(true);
-            fabExcluirTelaPrincipal.setVisibility(View.GONE);
-            fabEditarTelaPrincipal.setVisibility(View.GONE);
+            fabExcluirTelaPrincipal.setVisibility(View.INVISIBLE);
+            fabEditarTelaPrincipal.setVisibility(View.INVISIBLE);
         }
         if (this.progressDialog != null && this.progressDialog.isShowing()) this.progressDialog.dismiss();
     }

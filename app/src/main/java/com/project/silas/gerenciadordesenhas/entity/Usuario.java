@@ -9,7 +9,7 @@ import com.project.silas.gerenciadordesenhas.core.annotations.IgnorePersistence;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Usuario {
+public class Usuario implements Parcelable{
 
     private Long id;
     private String nomeUsuario;
@@ -26,6 +26,30 @@ public class Usuario {
         this.senhaUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_SENHA));
         this.tokenUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_TOKEN));
     }
+
+    protected Usuario(Parcel in) {
+        if (in.readByte() == 0) {
+            this.id = null;
+        } else {
+            this.id = in.readLong();
+        }
+        this.nomeUsuario = in.readString();
+        this.emailUsuario = in.readString();
+        this.senhaUsuario = in.readString();
+        this.tokenUsuario = in.readString();
+    }
+
+    public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
+        @Override
+        public Usuario createFromParcel(Parcel in) {
+            return new Usuario(in);
+        }
+
+        @Override
+        public Usuario[] newArray(int size) {
+            return new Usuario[size];
+        }
+    };
 
     public Long getId() {
         return id;
@@ -70,6 +94,25 @@ public class Usuario {
     public Usuario setTokenUsuario(String tokenUsuario) {
         this.tokenUsuario = tokenUsuario;
         return this;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (this.id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(this.id);
+        }
+        dest.writeString(this.nomeUsuario);
+        dest.writeString(this.emailUsuario);
+        dest.writeString(this.senhaUsuario);
+        dest.writeString(this.tokenUsuario);
     }
 
     public interface Metadata {

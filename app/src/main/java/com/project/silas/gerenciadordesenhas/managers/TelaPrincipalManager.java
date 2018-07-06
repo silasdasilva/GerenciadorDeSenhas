@@ -23,12 +23,12 @@ public class TelaPrincipalManager extends ManagerAbstract {
         this.telaPrincipalBusiness = new TelaPrincipalBusiness(this.contexto);
     }
 
-    public void buscarLogins(final Usuario usuarioLogado, final String queryPesquisa, OperationListener<Cursor> operationListener) {
+    public void buscarLogins(final String queryPesquisa, OperationListener<Cursor> operationListener) {
         runViaSyncLoader(LOADER_BUSCA_SITES_USUARIO, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
 
-                OperationResult<Cursor> retornoSites = telaPrincipalBusiness.buscarLogins(usuarioLogado, queryPesquisa);
+                OperationResult<Cursor> retornoSites = telaPrincipalBusiness.buscarLogins(queryPesquisa);
 
                 if (retornoSites.getError() != null){
                     result.withError(retornoSites.getError());
