@@ -30,6 +30,8 @@ public class LoginUsuariosBusiness {
             if (usuarioLogar.getSenhaUsuario().equals("")) throw new LoginException("Digite uma senha");
 
             Log.i("loginBusiness", "Confere caracteres digitados:\n"
+                    + "\nId: " + usuarioLogar.getId()
+                    + "\nNome: " + usuarioLogar.getNomeUsuario()
                     + "\nE-mail: " + usuarioLogar.getEmailUsuario()
                     + "\nSenha: " + usuarioLogar.getSenhaUsuario()
             );
@@ -41,6 +43,8 @@ public class LoginUsuariosBusiness {
             cursor.moveToFirst();
             Usuario usuario = new Usuario(cursor);
             Log.i("loginBusiness", "Confere caracteres banco:\n"
+                    + "\nId: " + usuario.getId()
+                    + "\nNome: " + usuario.getNomeUsuario()
                     + "\nE-mail: " + usuario.getEmailUsuario()
                     + "\nSenha: " + usuario.getSenhaUsuario()
             );

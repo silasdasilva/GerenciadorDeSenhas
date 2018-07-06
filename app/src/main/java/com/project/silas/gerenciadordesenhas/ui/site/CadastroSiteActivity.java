@@ -74,6 +74,11 @@ public class CadastroSiteActivity extends AppCompatActivity {
         if (getIntent().getExtras().get(CHAVE_ATUALIZACAO_SITE) != null) {
             this.chaveUsada = CHAVE_ATUALIZACAO_SITE;
             this.siteModificacao = getIntent().getParcelableExtra(CHAVE_ATUALIZACAO_SITE);
+            if (this.siteModificacao != null) {
+                tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
+                tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
+                tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
+            }
         }
 
         if (getIntent().getExtras().get(CHAVE_EXCLUSAO_SITE) != null) {

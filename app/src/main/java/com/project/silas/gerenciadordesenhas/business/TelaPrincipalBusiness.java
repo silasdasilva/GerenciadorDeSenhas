@@ -34,7 +34,9 @@ public class TelaPrincipalBusiness {
 
         try {
             cursor = this.siteDao.rawQuery(Query.BUSCA_SITES_USUARIO, new String[]{
-                    String.valueOf(this.usuarioLogado.getId()), pesquisa, pesquisa
+                    String.valueOf(this.usuarioLogado.getId())
+                    , pesquisa
+                    , pesquisa
             });
 
             Log.i("telaPrincipalBusiness", "Qtde de registros: " + cursor.getCount());
