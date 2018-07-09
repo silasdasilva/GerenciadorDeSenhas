@@ -7,15 +7,21 @@ android {
     defaultConfig {
         applicationId "com.project.silas.gerenciadordesenhas"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://dev.people.com.ai/mobile/api/v2/\"")
+            buildConfigField("String", "DOMAIN", "\"dev.people.com.ai\"")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"https://dev.people.com.ai/mobile/api/v2/\"")
+            buildConfigField("String", "DOMAIN", "\"dev.people.com.ai\"")
         }
     }
 }
@@ -43,5 +49,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //FloatActionMenu com Fabs acoplados
     implementation 'com.github.clans:fab:1.6.4'
-
+    //Lib de conexão http
+    implementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    //Atualizando dependencia para importar a classe Hex
+    implementation 'commons-codec:commons-codec:1.11'
 }

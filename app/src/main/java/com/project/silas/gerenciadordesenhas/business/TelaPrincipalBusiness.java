@@ -8,8 +8,7 @@ import android.util.Log;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
-import com.project.silas.gerenciadordesenhas.repository.SiteDao;
-import com.project.silas.gerenciadordesenhas.repository.UsuarioDao;
+import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
 
 public class TelaPrincipalBusiness {
 

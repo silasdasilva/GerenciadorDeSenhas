@@ -8,24 +8,31 @@ import android.util.Log;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
-import com.project.silas.gerenciadordesenhas.repository.UsuarioDao;
+import com.project.silas.gerenciadordesenhas.repository.database.dao.UsuarioDao;
+import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
+
+import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CadastroUsuariosBusiness {
 
     private Context contexto;
     private SQLiteDatabase bancoDeDados;
     private UsuarioDao usuarioDao;
+    protected BackendIntegrator backendIntegrator;
 
     public CadastroUsuariosBusiness (Context context){
         this.contexto = context;
         this.bancoDeDados = InicializacaoBusiness.getDatabase();
+        this.backendIntegrator = new BackendIntegrator(this.contexto);
         this.usuarioDao = new UsuarioDao(this.bancoDeDados);
     }
 
     public OperationResult<Usuario> cadastrarUsuario(Usuario usuarioCadastro) {
-
+        Map<String, String> requestData = new HashMap<String, String>();
         OperationResult<Usuario> retornoCadastro = new OperationResult<>();
         Cursor cursor = null;
 
@@ -72,11 +79,20 @@ public class CadastroUsuariosBusiness {
             String token = "";
 
             for (int posicao = 0; posicao < timeStamp.length(); posicao++) {
-                token = emailUsuario.substring(posicao, posicao + 1) + timeStamp.substring(posicao, posicao + 1);
+                token += emailUsuario.substring(posicao, posicao + 1) + timeStamp.substring(posicao, posicao + 1);
             }
 
             Log.i("cadastroBusiness", "Token: " + token);
             usuarioCadastro.setTokenUsuario(token);
+
+            requestData.put("name", usuarioCadastro.getNomeUsuario());
+            requestData.put("email", usuarioCadastro.getEmailUsuario());
+            requestData.put("password", usuarioCadastro.getSenhaUsuario());
+            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "register", requestData);
+
+            if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
+
+            Log.i("cadastroBusiness", "JSON recebido: " + response);
 
             long idUsuario = this.usuarioDao.insert(usuarioCadastro);
 
@@ -85,7 +101,8 @@ public class CadastroUsuariosBusiness {
             cursor.moveToFirst();
             if (cursor.getInt(cursor.getColumnIndex("verificacaoId")) <= 0) throw new CadastroException("Usuário não pôde ser cadastrado");
 
-            Log.i("cadastroBusiness", "Número de usuários cadastrados: " + cursor.getCount());
+            Log.i("cadastroBusiness", "Número de usuários cadastrados no banco: " + cursor.getCount());
+
             retornoCadastro.withResult(usuarioCadastro);
 
             this.bancoDeDados.setTransactionSuccessful();

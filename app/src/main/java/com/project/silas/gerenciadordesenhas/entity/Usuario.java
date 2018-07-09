@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import com.project.silas.gerenciadordesenhas.core.annotations.IgnorePersistence;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,13 @@ public class Usuario implements Parcelable{
     private String tokenUsuario;
 
     public Usuario() {}
+
+    public Usuario(JSONObject jsonObject) {
+        nomeUsuario = jsonObject.optString(Metadata.JSON_FIELD_NOME);
+        emailUsuario = jsonObject.optString(Metadata.JSON_FIELD_EMAIL);
+        senhaUsuario = jsonObject.optString(Metadata.JSON_FIELD_SENHA);
+        tokenUsuario = jsonObject.optString(Metadata.JSON_FIELD_TOKEN);
+    }
 
     public Usuario (Cursor cursor){
         this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
@@ -127,5 +136,11 @@ public class Usuario implements Parcelable{
         String FIELD_TOKEN = "tokenUsuario";
         String ORDER_BY_ASC = "ASC";
         String ORDER_BY_DESC = "DESC";
+
+        //Nome dos campos da forma que vêem do servidor.
+        String JSON_FIELD_NOME = "name";
+        String JSON_FIELD_EMAIL = "email";
+        String JSON_FIELD_SENHA = "password";
+        String JSON_FIELD_TOKEN = "token";
     }
 }

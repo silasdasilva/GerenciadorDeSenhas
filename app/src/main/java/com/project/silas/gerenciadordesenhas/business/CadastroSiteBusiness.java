@@ -5,17 +5,26 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.project.silas.gerenciadordesenhas.BuildConfig;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
-import com.project.silas.gerenciadordesenhas.repository.SiteDao;
+import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
+import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CadastroSiteBusiness {
 
     private Context contexto;
     private SQLiteDatabase bancoDeDados;
     private Usuario usuarioLogado;
+
+    protected BackendIntegrator backendIntegrator;
 
     private SiteDao siteDao;
 
@@ -24,6 +33,7 @@ public class CadastroSiteBusiness {
         this.bancoDeDados = InicializacaoBusiness.getDatabase();
         this.siteDao = new SiteDao(this.bancoDeDados);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
+        this.backendIntegrator = new BackendIntegrator(this.contexto);
     }
 
     public OperationResult<Site> insereSite(Site siteInsercao) {
@@ -34,6 +44,16 @@ public class CadastroSiteBusiness {
         try {
             this.bancoDeDados.beginTransaction();
 
+            Map<String, String> requestPayload = new HashMap<>();
+
+            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", null);
+
+            if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
+
+            Log.i("loginBusiness", "JSON recebido: " + response);
+
+            Site site = new Site(response);
+
             cursor = this.siteDao.rawQuery(Query.CONFERE_EXISTENCIA_URL_E_LOGIN
                     , new String[]{String.valueOf(this.usuarioLogado.getId()) // WHERE
                             , siteInsercao.getUrlSite() // AND
@@ -42,7 +62,7 @@ public class CadastroSiteBusiness {
             cursor.moveToFirst();
             if (cursor.getInt(cursor.getColumnIndex("verificaExistencia")) > 0) throw new CadastroException("Já existe esse site para este usuário!");
 
-            long idSite = this.siteDao.insert(siteInsercao);
+            long idSite = this.siteDao.insertWithOnConflict(site, SQLiteDatabase.CONFLICT_REPLACE);
 
             /*this.bancoDeDados.execSQL(Query.INSERIR_SITE,
                     new String[]{String.valueOf(this.usuarioLogado.getId())

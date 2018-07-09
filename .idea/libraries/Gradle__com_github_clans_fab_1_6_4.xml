@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.clans:fab-1.6.4">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fab-1.6.4.aar/6dc2f07526ba464cd4ac869d029dfb04/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fab-1.6.4.aar/6dc2f07526ba464cd4ac869d029dfb04/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fab-1.6.4.aar/74a9597240dee46b9ee3a826ee918dbb/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/fab-1.6.4.aar/74a9597240dee46b9ee3a826ee918dbb/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

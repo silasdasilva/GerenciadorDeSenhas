@@ -14,10 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/**
- * Created by silas on 04/07/2018.
- */
-
 @SuppressLint("NewApi")
 public abstract class DaoAbstract<T> implements AutoCloseable {
     public static final String METADATA_FIELD_TABLENAME = "TABLE_NAME";

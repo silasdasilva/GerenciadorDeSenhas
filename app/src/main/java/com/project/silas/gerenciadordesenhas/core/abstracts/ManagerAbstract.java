@@ -11,9 +11,6 @@ import android.util.Log;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 
-/**
- * Created by ansilva on 29/08/2016.
- */
 public abstract class ManagerAbstract {
     protected Context context;
 

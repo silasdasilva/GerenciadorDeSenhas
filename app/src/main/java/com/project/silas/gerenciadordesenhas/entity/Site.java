@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import com.project.silas.gerenciadordesenhas.core.annotations.IgnorePersistence;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,8 @@ public class Site implements Parcelable {
     private Long id;
     private Usuario usuario;
     private String idUsuario;
+    private String nomeSite;
+
     private String urlSite;
     private String loginSite;
     private String senhaSite;
@@ -24,9 +28,16 @@ public class Site implements Parcelable {
     public Site (Cursor cursor) {
         this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
         this.idUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_ID_USUARIO));
+        this.nomeSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_NOME));
         this.urlSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_URL));
         this.loginSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_LOGIN));
         this.senhaSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_SENHA));
+    }
+
+    public Site (JSONObject jsonObject) {
+        this.urlSite = jsonObject.optString(Metadata.JSONFIELD_URL);
+        this.loginSite = jsonObject.optString(Metadata.JSONFIELD_LOGIN);
+        this.senhaSite = jsonObject.optString(Metadata.JSONFIELD_SENHA);
     }
 
     protected Site(Parcel in) {
@@ -36,6 +47,7 @@ public class Site implements Parcelable {
             this.id = in.readLong();
         }
         this.idUsuario = in.readString();
+        this.nomeSite = in.readString();
         this.urlSite = in.readString();
         this.loginSite = in.readString();
         this.senhaSite = in.readString();
@@ -68,6 +80,15 @@ public class Site implements Parcelable {
 
     public Site setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+        return this;
+    }
+
+    public String getNomeSite() {
+        return nomeSite;
+    }
+
+    public Site setNomeSite(String nomeSite) {
+        this.nomeSite = nomeSite;
         return this;
     }
 
@@ -123,6 +144,7 @@ public class Site implements Parcelable {
         }
         dest.writeParcelable(this.usuario, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
         dest.writeString(this.idUsuario);
+        dest.writeString(this.nomeSite);
         dest.writeString(this.urlSite);
         dest.writeString(this.loginSite);
         dest.writeString(this.senhaSite);
@@ -135,10 +157,15 @@ public class Site implements Parcelable {
         String PK_ALIAS = "idSite";
         String FIELD_ID = "id";
         String FIELD_ID_USUARIO = "idUsuario";
+        String FIELD_NOME = "nomeSite";
         String FIELD_URL = "urlSite";
         String FIELD_LOGIN = "loginSite";
         String FIELD_SENHA = "senhaSite";
         String ORDER_BY_ASC = "ASC";
         String ORDER_BY_DESC = "DESC";
+
+        String JSONFIELD_URL = "url";
+        String JSONFIELD_LOGIN = "email";
+        String JSONFIELD_SENHA = "password";
     }
 }
