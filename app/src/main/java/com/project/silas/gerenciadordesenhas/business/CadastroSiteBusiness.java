@@ -45,8 +45,12 @@ public class CadastroSiteBusiness {
             this.bancoDeDados.beginTransaction();
 
             Map<String, String> requestPayload = new HashMap<>();
+            requestPayload.put("url", siteInsercao.getUrlSite());
+            requestPayload.put("nome", siteInsercao.getNomeSite());
+            requestPayload.put("login", siteInsercao.getLoginSite());
+            requestPayload.put("senha", siteInsercao.getSenhaSite());
 
-            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", null);
+            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", requestPayload);
 
             if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
 

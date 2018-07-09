@@ -1,31 +1,31 @@
 package com.project.silas.gerenciadordesenhas.repository.network;
 
 import android.content.Context;
-import android.os.PowerManager;
 import android.util.Log;
 
-import com.google.android.gms.common.api.Response;
 import com.project.silas.gerenciadordesenhas.BuildConfig;
-import com.project.silas.gerenciadordesenhas.business.FileBusiness;
-import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.business.UsuarioBusiness;
-import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToConnectServerException;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Headers;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class BackendIntegrator {
     protected Context context;
@@ -68,39 +68,31 @@ public class BackendIntegrator {
      */
     public JSONObject syncRequest(int method, String urlEndpoint, Map<String, String> requestPayload, Map<String, File> arquivos) throws FailedToConnectServerException {
 
-        Log.e("nova", "Nova request solicitada, url: " + BuildConfig.BASE_URL + urlEndpoint + ". PayLoad: " + requestPayload);
         if(!this.isInternetAvailable()) throw new FailedToConnectServerException("Erro ao enviar/receber dados api");
 
         if(requestPayload == null) requestPayload = new HashMap<>();
 
-        okhttp3.Response response = null;
-        Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.BASE_URL + urlEndpoint);
+        Log.e("nova", "Nova request solicitada, url: " + BuildConfig.BASE_URL + urlEndpoint + ". PayLoad: " + requestPayload);
 
-        //Classe responsável por controlar modos de energia, utilizado aqui para modo de economia de energia não travar recebimento de dados da API
-        PowerManager pm = (PowerManager) this.context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock bloqueioDeEspera = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, this.context.getClass().getName());
+        Response response = null;
+        Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.BASE_URL + urlEndpoint);
 
         try {
             if(method == METHOD_POST) {
                 MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-                for(int i = 0; i < requestPayload.size(); i++) {
-                    String key = String.valueOf(requestPayload.keySet().toArray()[i]);
+                for(int posicao = 0; posicao < requestPayload.size(); posicao++) {
+                    String key = String.valueOf(requestPayload.keySet().toArray()[posicao]);
                     builder.addFormDataPart(key, requestPayload.get(key));
                 }
 
                 RequestBody body = builder.build();
 
                 requestBuilder.post(body);
-                requestBuilder.header("content-type", "application/json");
-            }
-            if (method == METHOD_GET){
-                requestBuilder.get();
-                requestBuilder.header("authorization", requestPayload.get("token"));
+                requestBuilder.header("Content-Type", "application/json");
+
             }
             Request request = requestBuilder.build();
             response = this.client.newCall(request).execute();
-
-            bloqueioDeEspera.acquire();
 
             String strResponse = response.body().string();
             Log.e("sRequest", urlEndpoint);
@@ -119,8 +111,6 @@ public class BackendIntegrator {
             Log.e("retorno", "Exception: " + e.getMessage());
             e.printStackTrace();
             throw new FailedToConnectServerException(e.getMessage());
-        } finally {
-            if (bloqueioDeEspera.isHeld()) bloqueioDeEspera.release();
         }
     }
 
