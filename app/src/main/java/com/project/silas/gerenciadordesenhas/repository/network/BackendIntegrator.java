@@ -59,7 +59,7 @@ public class BackendIntegrator {
     }
 
     /**
-     * Realiza uma requisição sincrona ao servidor bastando apenas informar o endpoint que se deseja consumir.
+     * Realiza uma requisição sincrona a API bastando apenas informar o endpoint que se deseja consumir.
      * @param method
      * @param urlEndpoint
      * @param requestPayload
@@ -83,15 +83,6 @@ public class BackendIntegrator {
         try {
             if(method == METHOD_POST) {
                 MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-                /*if(arquivos != null && arquivos.size() > 0) {
-                    FileBusiness fileBusiness = new FileBusiness(context);
-                    for(int f = 0; f < arquivos.size(); f++) {
-                        String key = (String) arquivos.keySet().toArray()[f];
-                        File arquivo = arquivos.get(key);
-                        String mimetype = fileBusiness.getMimeType(arquivo);
-                        builder.addFormDataPart(key, arquivo.getName(), RequestBody.create(MediaType.parse(mimetype), arquivo));
-                    }
-                }*/
                 for(int i = 0; i < requestPayload.size(); i++) {
                     String key = String.valueOf(requestPayload.keySet().toArray()[i]);
                     builder.addFormDataPart(key, requestPayload.get(key));

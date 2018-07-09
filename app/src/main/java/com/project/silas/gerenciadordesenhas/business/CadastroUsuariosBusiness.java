@@ -67,10 +67,11 @@ public class CadastroUsuariosBusiness {
              *
              * */
 
-            if (usuarioCadastro.getSenhaUsuario().length() < 8) throw new CadastroException("A senha deve ter no mínimo 8 caracteres!");
-            if (!usuarioCadastro.getSenhaUsuario().matches(".*[A-Za-z]{1,}[0-9]*[^0-9A-Za-z]*")) throw new CadastroException("A senha deve conter ao menos 1 letra");
-            if (!usuarioCadastro.getSenhaUsuario().matches(".*[0-9]{1,}[A-Za-z]*[^0-9A-Za-z]*")) throw new CadastroException("A senha deve conter ao menos 1 número");
-            if (!usuarioCadastro.getSenhaUsuario().matches(".*[^0-9A-Za-z]{1,}[A-Za-z]*[0-9]*")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
+            if (usuarioCadastro.getSenhaUsuario().length() < 10) throw new CadastroException("A senha deve ter no mínimo 10 caracteres!");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[a-z]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 letra minúscula");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[A-Z]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 letra maiúscula");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[0-9]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 número");
+            if (!usuarioCadastro.getSenhaUsuario().matches(".*[^0-9A-Za-z]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
 
             // Se tudo certo insere usuario
 
