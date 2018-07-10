@@ -37,9 +37,12 @@ public class SplashScreenActivity extends AppCompatActivity{
             @Override
             public void onSuccess(Void result) {
 
-                Log.i("inicialActivity", "Banco criado!");
+                Toast.makeText(SplashScreenActivity.this, "Faça seu login!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SplashScreenActivity.this, LoginUsuariosActivity.class));
 
-                inicializacaoManager.buscaTotalUsuarios(new OperationListener<Integer>(){
+                //Log.i("inicialActivity", "Banco criado!");
+
+                /*inicializacaoManager.buscaTotalUsuarios(new OperationListener<Integer>(){
                     @Override
                     public void onSuccess(Integer result) {
                         if (result > 0){
@@ -67,7 +70,7 @@ public class SplashScreenActivity extends AppCompatActivity{
                         Toast.makeText(SplashScreenActivity.this, "Tente cadastrar novamente!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SplashScreenActivity.this, CadastroUsuariosActivity.class));
                     }
-                });
+                });*/
             }
 
             @Override

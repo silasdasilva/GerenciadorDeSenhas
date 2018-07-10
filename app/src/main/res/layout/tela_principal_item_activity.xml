@@ -13,6 +13,27 @@
         android:layout_height="match_parent"
         android:padding="8dp">
 
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_item_logo_tela_principal"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/colorAccent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_border_color="@color/colorPrimaryDark"
+            app:riv_border_width="1dp"
+            app:riv_corner_radius="5dp"
+            app:riv_mutate_background="true"
+            app:riv_oval="false"
+            app:riv_tile_mode="clamp" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -23,8 +44,8 @@
             android:textStyle="bold"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal12"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -36,7 +57,7 @@
             android:maxLines="1"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal1"
-            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal12"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,8 +71,8 @@
             android:textStyle="bold"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal2"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal12"
             app:layout_constraintTop_toTopOf="@+id/gl_item_tela_principal1" />
 
         <TextView
@@ -63,44 +84,23 @@
             android:maxLines="1"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal2"
-            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal11"
+            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal12"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gl_item_tela_principal1" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="1dp"
-            android:gravity="center_vertical|start"
-            android:maxLines="1"
-            android:text="@string/st_senha_item_tela_principal"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/gl_item_tela_principal11"
-            app:layout_constraintTop_toTopOf="@+id/gl_item_tela_principal2" />
-
-        <TextView
-            android:id="@+id/tv_item_senha_tela_principal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="1dp"
-            android:gravity="center_vertical|start"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/gl_item_tela_principal3"
-            app:layout_constraintLeft_toLeftOf="@+id/gl_item_tela_principal11"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_item_tela_principal2" />
 
         <android.support.constraint.Guideline
             android:id="@+id/gl_item_tela_principal11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25"/>
+            app:layout_constraintGuide_percent="0.15"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/gl_item_tela_principal12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/gl_item_tela_principal1"
@@ -115,14 +115,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="50dp" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_item_tela_principal3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="75dp" />
-
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

@@ -10,10 +10,10 @@
     <string name="st_nao_tela_principal">Não</string>
 
     <string name="st_selecionar_tela_principal">Selecione</string>
-    <string name="st_inserir_tela_principal">Inserir</string>
-    <string name="st_editar_tela_principal">Editar</string>
+    <string name="st_inserir_editar_tela_principal">Adicionar/Editar</string>
     <string name="st_excluir_tela_principal">Excluir</string>
 
+    <string name="st_nome_item_tela_principal">Nome:</string>
     <string name="st_url_item_tela_principal">Url:</string>
     <string name="st_login_item_tela_principal">Login:</string>
     <string name="st_senha_item_tela_principal">Senha:</string>

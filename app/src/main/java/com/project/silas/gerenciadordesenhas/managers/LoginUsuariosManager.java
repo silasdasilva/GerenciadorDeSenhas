@@ -10,6 +10,8 @@ import com.project.silas.gerenciadordesenhas.entity.Usuario;
 
 public class LoginUsuariosManager extends ManagerAbstract {
 
+    private static final int LOADER_LOGIN_USUARIO = 0;
+
     private Context contexto;
     private LoginUsuariosBusiness loginUsuariosBusiness;
 
@@ -19,13 +21,20 @@ public class LoginUsuariosManager extends ManagerAbstract {
         this.loginUsuariosBusiness = new LoginUsuariosBusiness(this.contexto);
     }
 
-    public void efetuarLogin(Usuario usuarioLogar, OperationListener<Usuario> listenerLogin) {
-        OperationResult<Usuario> retornoLogin = this.loginUsuariosBusiness.efetuarLogin(usuarioLogar);
+    public void efetuarLogin(final Usuario usuarioLogar, OperationListener<Usuario> listenerLogin) {
+        runViaSyncLoader(LOADER_LOGIN_USUARIO, new OperationListener<OperationResult>(){
+            @Override
+            public void onSuccess(OperationResult result) {
 
-        if (retornoLogin.getError() != null){
-            listenerLogin.onError(retornoLogin.getError());
-            return;
-        }
-        listenerLogin.onSuccess(retornoLogin.getResult());
+                OperationResult<Usuario> retornoLogin = loginUsuariosBusiness.efetuarLogin(usuarioLogar);
+
+                if (retornoLogin.getError() != null){
+                    result.withError(retornoLogin.getError());
+                    return;
+                }
+                result.withResult(retornoLogin.getResult());
+
+            }
+        }, listenerLogin);
     }
 }

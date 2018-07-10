@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,9 +45,6 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     @BindView(R.id.fabmenu_tela_principal)
     protected FloatingActionMenu fabMenuTelaPrincipal;
 
-    @BindView(R.id.fab_inserir_tela_principal)
-    protected FloatingActionButton fabInserirTelaPrincipal;
-
     @BindView(R.id.fab_editar_tela_principal)
     protected FloatingActionButton fabEditarTelaPrincipal;
 
@@ -60,6 +60,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     private TelaPrincipalAdapter adaptador;
     private ProgressDialog progressDialog;
     private GridLayoutManager gridLayoutManager;
+    private FingerprintManager fingerprintManager;
 
     private long idSiteSelecionado = -1;
     private String ultimaPesquisa = "";
@@ -67,6 +68,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     private int posicaoParaSelecionar = -1;
     private AlertDialog.Builder alerta;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,19 +119,11 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             }
         });
 
-        fabInserirTelaPrincipal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                startActivityForResult(intent, CODIGO_RETORNO_REGISTRO);
-            }
-        });
-
         fabEditarTelaPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                intent.putExtra(CadastroSiteActivity.CHAVE_REGISTRO_SITE, adaptador.getSiteSelecionado());
+                if (adaptador.getSiteSelecionado() != null) intent.putExtra(CadastroSiteActivity.CHAVE_REGISTRO_SITE, adaptador.getSiteSelecionado());
                 startActivityForResult(intent, CODIGO_RETORNO_REGISTRO);
             }
         });
@@ -306,13 +300,15 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     private void configuraItemSelecionado(){
         Site siteSelecionado = this.adaptador.getSiteSelecionado();
         if (siteSelecionado == null) {
-            fabEditarTelaPrincipal.setVisibility(View.VISIBLE);
             fabExcluirTelaPrincipal.setVisibility(View.VISIBLE);
             fabMenuTelaPrincipal.open(true);
             this.adaptador.procuraSite(this.idSiteSelecionado);
         } else {
             this.adaptador.procuraSite(this.idSiteSelecionado);
-            if (this.adaptador.getSiteSelecionado() == null) fabMenuTelaPrincipal.close(true);
+            if (this.adaptador.getSiteSelecionado() == null) {
+                fabMenuTelaPrincipal.close(true);
+                fabExcluirTelaPrincipal.setVisibility(View.GONE);
+            }
         }
         this.adaptador.notifyDataSetChanged();
     }
@@ -372,8 +368,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             cvListaVaziaTelaPrincipal.setVisibility(View.VISIBLE);
             rvTelaPrincpal.setVisibility(View.INVISIBLE);
             fabMenuTelaPrincipal.close(true);
-            fabExcluirTelaPrincipal.setVisibility(View.INVISIBLE);
-            fabEditarTelaPrincipal.setVisibility(View.INVISIBLE);
+            fabExcluirTelaPrincipal.setVisibility(View.GONE);
         }
         if (this.progressDialog != null && this.progressDialog.isShowing()) this.progressDialog.dismiss();
     }

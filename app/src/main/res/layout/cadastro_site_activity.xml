@@ -1,167 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="2dp"
     app:cardCornerRadius="2dp">
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="2dp">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tb_cadastro_site"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tv_title_atendimento_listeatendimento_atertaexclusao"
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/st_title_cadastro_site" />
-
-        </android.support.v7.widget.Toolbar>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_url_cadastro_site"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/st_url_item_tela_principal"
-            app:hintAnimationEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site1" >
+            android:orientation="vertical" >
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/tiet_url_cadastro_site"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="flagNavigateNext"
-                android:inputType="text"
-                android:maxLines="1"/>
+                android:layout_height="match_parent"
+                android:padding="2dp">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/tb_cadastro_site"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_login_cadastro_site"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/st_login_item_tela_principal"
-            app:hintAnimationEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site2" >
+                    <TextView
+                        android:id="@+id/tv_titulo_cadastro_site"
+                        style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/st_title_cadastro_site" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/tiet_login_cadastro_site"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="flagNavigateNext"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"/>
+                </android.support.v7.widget.Toolbar>
 
-        </android.support.design.widget.TextInputLayout>
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/iv_item_logo_tela_principal"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_margin="8dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/colorAccent"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tb_cadastro_site"
+                    app:riv_border_color="@color/colorPrimaryDark"
+                    app:riv_border_width="1dp"
+                    app:riv_corner_radius="120dp"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="false"
+                    app:riv_tile_mode="clamp" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_senha_cadastro_site"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:hint="@string/st_senha_item_tela_principal"
-            app:hintAnimationEnabled="true"
-            app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site3" >
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_nome_cadastro_site"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="@string/st_nome_item_tela_principal"
+                    app:hintAnimationEnabled="true"
+                    app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site1">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/tiet_senha_cadastro_site"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:maxLines="1"/>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tiet_nome_cadastro_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="flagNavigateNext"
+                        android:inputType="text"
+                        android:maxLines="1" />
 
-        </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/bt_salvar_cadastro_site"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="@string/st_salvar_cadastro_site"
-            app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/gl_cadastro_site11" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_url_cadastro_site"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="@string/st_url_item_tela_principal"
+                    app:hintAnimationEnabled="true"
+                    app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site2">
 
-        <Button
-            android:id="@+id/bt_cancelar_cadastro_site"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:text="@string/st_cancelar_cadastro_site"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/gl_cadastro_site11"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site5"/>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tiet_url_cadastro_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="flagNavigateNext"
+                        android:inputType="text"
+                        android:maxLines="1" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="70dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_login_cadastro_site"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="@string/st_login_item_tela_principal"
+                    app:hintAnimationEnabled="true"
+                    app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site3">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="120dp" />
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tiet_login_cadastro_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="flagNavigateNext"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="170dp" />
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="220dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_senha_cadastro_site"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="@string/st_senha_item_tela_principal"
+                    app:hintAnimationEnabled="true"
+                    app:layout_constraintBottom_toTopOf="@+id/gl_cadastro_site5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gl_cadastro_site4">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/gl_cadastro_site5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="250dp" />
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tiet_senha_cadastro_site"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
-    </android.support.constraint.ConstraintLayout>
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/bt_salvar_cadastro_site"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/st_salvar_cadastro_site"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/gl_cadastro_site11"
+                    app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site7" />
+
+                <Button
+                    android:id="@+id/bt_cancelar_cadastro_site"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/st_cancelar_cadastro_site"
+                    android:textColor="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/gl_cadastro_site11"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site6" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="250dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="300dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="350dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="400dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="450dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/gl_cadastro_site6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="500dp" />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.v7.widget.CardView>

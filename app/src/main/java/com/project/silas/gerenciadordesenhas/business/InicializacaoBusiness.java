@@ -60,10 +60,12 @@ public class InicializacaoBusiness {
 
     private void criacaoTabelasIniciais(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Usuario (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , nomeUsuario varchar(255) NOT NULL, emailUsuario varchar(255) NOT NULL, senhaUsuario varchar(255) NOT NULL, tokenUsuario varchar(255) UNIQUE NOT NULL);");
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Site (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, nomeSite varchar (255), urlSite varchar(255) NOT NULL, idUsuario bigint(19) NOT NULL, loginSite varchar(255) NOT NULL, senhaSite VARCHAR(255) NOT NULL);");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Site (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, caminhoFoto varchar(255), nomeSite varchar (255), urlSite varchar(255) NOT NULL, idUsuario bigint(19) NOT NULL, loginSite varchar(255) NOT NULL, senhaSite VARCHAR(255) NOT NULL);");
+
     }
 
     private void atualizacaoTabelas(int ultimaVersao, int novaVersao){
+
         //lógica de atualização quando houver
         if (ultimaVersao < novaVersao){
 

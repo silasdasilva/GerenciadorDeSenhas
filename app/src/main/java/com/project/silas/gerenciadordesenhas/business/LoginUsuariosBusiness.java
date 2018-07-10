@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
+import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
+import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToConnectServerException;
 import com.project.silas.gerenciadordesenhas.exceptions.LoginException;
 import com.project.silas.gerenciadordesenhas.repository.database.dao.UsuarioDao;
@@ -15,6 +17,7 @@ import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrato
 
 import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,28 +42,20 @@ public class LoginUsuariosBusiness {
         Cursor cursor = null;
 
         try{
+            this.banco.beginTransaction();
 
             if (usuarioLogar.getEmailUsuario().equals("")) throw new LoginException("Digite um e-mail");
             if (usuarioLogar.getSenhaUsuario().equals("")) throw new LoginException("Digite uma senha");
 
-            Log.i("loginBusiness", "Confere caracteres digitados:\n"
-                    + "\nId: " + usuarioLogar.getId()
-                    + "\nNome: " + usuarioLogar.getNomeUsuario()
-                    + "\nE-mail: " + usuarioLogar.getEmailUsuario()
-                    + "\nSenha: " + usuarioLogar.getSenhaUsuario()
-            );
+            Usuario usuarioBanco = loginUsingDatabase(usuarioLogar);
 
-            //Se existe internet, vou fazer o login utilizando backend
+            //Se existe internet, vou fazer o login utilizando backend para atualizar os dados contidos no dispositvo
             if(this.backendIntegrator.isInternetAvailable()) {
-                OperationResult<Usuario> result = this.loginUsingNetwork(usuarioLogar.getEmailUsuario(), usuarioLogar.getSenhaUsuario());
-                if(result.getResult() == null) return result;
-
-                SessionSingletonBusiness.setUsuario(result.getResult());
-                return result;
+                usuarioBanco = this.loginAPI(usuarioBanco);
             }
-            //Caso contrário realizo o login utilizando o banco de dados local:
-            OperationResult<Usuario> result = this.loginUsingDatabase(usuarioLogar.getEmailUsuario(), usuarioLogar.getSenhaUsuario());
-            SessionSingletonBusiness.setUsuario(result.getResult());
+
+            retornoLogin.withResult(usuarioBanco);
+            this.banco.setTransactionSuccessful();
 
         } catch (Throwable error){
             error.printStackTrace();
@@ -68,66 +63,72 @@ public class LoginUsuariosBusiness {
             retornoLogin.withError(error);
         } finally {
             if (cursor != null) cursor.close();
+            this.banco.endTransaction();
         }
         return retornoLogin;
+    }
+
+    private Usuario loginUsingDatabase(Usuario usuarioLogar) {
+
+        Cursor cursor = this.usuarioDao.rawQuery(Query.BUSCA_USUARIOS_CADASTRADOS, new String[]{usuarioLogar.getEmailUsuario()});
+
+        if (cursor == null || cursor.getCount() <= 0 || cursor instanceof CursorIndexOutOfBoundsException) throw new LoginException("Este e-mail não pertence a nenhum Usuário. Tente novamente!");
+
+        cursor.moveToFirst();
+        Usuario usuarioBanco = new Usuario(cursor);
+        Log.i("loginBusiness", "Confere caracteres banco:\n"
+                + "\nNome: " + usuarioBanco.getNomeUsuario()
+                + "\nE-mail: " + usuarioBanco.getEmailUsuario()
+                + "\nSenha: " + usuarioBanco.getSenhaUsuario()
+        );
+
+        if (!usuarioBanco.getSenhaUsuario().equals(usuarioLogar.getSenhaUsuario())) throw new LoginException("Senha incorreta!");
+
+        Log.i("loginBusiness", "Confere caracteres digitados:\n"
+                + "\nNome: " + usuarioLogar.getNomeUsuario()
+                + "\nE-mail: " + usuarioLogar.getEmailUsuario()
+                + "\nSenha: " + usuarioLogar.getSenhaUsuario()
+        );
+        return usuarioBanco;
+    }
+
+    protected Usuario loginAPI(Usuario usuarioBanco) throws FailedToConnectServerException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Map<String, String> requestData = new HashMap<>();
+
+        requestData.put("email", usuarioBanco.getEmailUsuario());
+        requestData.put("password", usuarioBanco.getSenhaUsuario());
+
+        JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "login", requestData, null);
+        if (response == null || response.optString("type").equals("error")) throw new LoginException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
+
+        Log.i("loginBusiness", "JSON recebido: " + response);
+
+        Usuario usuarioLogadoAPI = usuarioBanco;
+        usuarioBanco.setTokenUsuario(response.optString(Usuario.Metadata.JSON_FIELD_TOKEN));
+
+        Log.i("loginBusiness", "Dados usuário Antes:\n"
+                + "\nId: " + usuarioBanco.getId()
+                + "\nNome: " + usuarioBanco.getNomeUsuario()
+                + "\nEmail: " + usuarioBanco.getEmailUsuario()
+                + "\nSenha: " + usuarioBanco.getSenhaUsuario()
+                + "\nToken: " + usuarioBanco.getTokenUsuario()
+                + "\n\nDados usuário Depois:\n"
+                + "\nId: " + usuarioLogadoAPI.getId()
+                + "\nNome: " + usuarioLogadoAPI.getNomeUsuario()
+                + "\nEmail: " + usuarioLogadoAPI.getEmailUsuario()
+                + "\nSenha: " + usuarioLogadoAPI.getSenhaUsuario()
+                + "\nToken: " + usuarioLogadoAPI.getTokenUsuario()
+        );
+
+        this.usuarioDao.updateWithOnConflict(usuarioLogadoAPI, SQLiteDatabase.CONFLICT_REPLACE);
+
+        return usuarioLogadoAPI;
     }
 
     @Override
     protected void finalize() throws Throwable {
         if(this.banco != null) //database.close();();
             super.finalize();
-    }
-
-    private OperationResult<Usuario> loginUsingDatabase(String login, String password) {
-        Cursor cursor = this.banco.rawQuery(Query.BUSCA_USUARIOS_CADASTRADOS, new String[]{login});
-
-        if (cursor == null || cursor.getCount() <= 0 || cursor instanceof CursorIndexOutOfBoundsException) throw new LoginException("Este e-mail não pertence a nenhum Usuário. Tente novamente!");
-
-        cursor.moveToFirst();
-        Usuario usuario = new Usuario(cursor);
-        Log.i("loginBusiness", "Confere caracteres banco:\n"
-                + "\nId: " + usuario.getId()
-                + "\nNome: " + usuario.getNomeUsuario()
-                + "\nE-mail: " + usuario.getEmailUsuario()
-                + "\nSenha: " + usuario.getSenhaUsuario()
-        );
-        if (!usuario.getSenhaUsuario().equals(password)) throw new LoginException("Senha incorreta!");
-        return new OperationResult<Usuario>().withResult(usuario);
-    }
-
-    protected OperationResult<Usuario> loginUsingNetwork(String login, String password) throws FailedToConnectServerException {
-        Map<String, String> requestData = new HashMap<String, String>();
-        OperationResult<Usuario> resultado = new OperationResult<>();
-        Usuario usuario;
-
-        requestData.put("name", login);
-        requestData.put("email", login);
-        requestData.put("password", password);
-        JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "login", requestData, null);
-        if (response == null || response.optString("type").equals("error")) throw new LoginException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
-
-        Log.i("loginBusiness", "JSON recebido: " + response);
-        //JSONObject jsonPessoa = response.optJSONObject("pessoa");
-        usuario = new Usuario(response);
-
-        try {
-            this.banco.beginTransaction();
-            this.usuarioDao.insertWithOnConflict(usuario, SQLiteDatabase.CONFLICT_REPLACE);
-            this.banco.setTransactionSuccessful();
-
-            SessionSingletonBusiness.setUsuario(usuario);
-
-            resultado.withResult(usuario);
-        } catch (Exception e) {
-            e.printStackTrace();
-            resultado.withError(e);
-            throw new FailedToConnectServerException();
-        } finally {
-            if(this.banco.inTransaction()) {
-                this.banco.endTransaction();
-            }
-        }
-        return resultado;
     }
 
     public interface Query {

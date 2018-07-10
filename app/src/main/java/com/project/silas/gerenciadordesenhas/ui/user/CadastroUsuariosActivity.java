@@ -1,5 +1,6 @@
 package com.project.silas.gerenciadordesenhas.ui.user;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
+import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.CadastroUsuariosManager;
 import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
@@ -40,6 +42,7 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
 
     private CadastroUsuariosManager cadastroUsuariosManager;
     private AlertDialog.Builder alerta;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
                     return;
                 }
 
+                exibirProgressDialog();
                 cadastroUsuariosManager.cadastrarUsuario(new Usuario().setNomeUsuario(tietFormCadastroNome.getText().toString())
                         .setEmailUsuario(tietFormCadastroEmail.getText().toString())
                         .setSenhaUsuario(tietFormCadastroSenha.getText().toString()),
@@ -67,6 +71,7 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
                         Toast.makeText(CadastroUsuariosActivity.this, "Cadastro efetuado com sucesso!", Toast.LENGTH_SHORT).show();
                         SessionSingletonBusiness.setUsuario(usuarioCadastrado);
                         startActivity(new Intent(CadastroUsuariosActivity.this, TelaPrincipalActivity.class));
+                        progressDialog.dismiss();
                         finish();
                     }
 
@@ -74,6 +79,7 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
                     public void onError(Throwable error) {
                         super.onError(error);
                         error.printStackTrace();
+                        progressDialog.dismiss();
                         Toast.makeText(CadastroUsuariosActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -125,5 +131,11 @@ public class CadastroUsuariosActivity extends AppCompatActivity {
             e.printStackTrace();
             super.onBackPressed();
         }
+    }
+
+    private void exibirProgressDialog(){
+        this.progressDialog = new CustomDialog(this).progress();
+        this.progressDialog.setMessage(getString(R.string.st_mensagem_progressdialog_tela_principal));
+        this.progressDialog.show();
     }
 }

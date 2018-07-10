@@ -1,6 +1,8 @@
 package com.project.silas.gerenciadordesenhas.entity;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,6 +19,10 @@ public class Site implements Parcelable {
     private Long id;
     private Usuario usuario;
     private String idUsuario;
+
+    private Bitmap logoSite;
+    private String caminhoFoto;
+
     private String nomeSite;
 
     private String urlSite;
@@ -28,6 +34,7 @@ public class Site implements Parcelable {
     public Site (Cursor cursor) {
         this.id = cursor.getLong(cursor.getColumnIndex(Metadata.FIELD_ID));
         this.idUsuario = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_ID_USUARIO));
+        this.caminhoFoto = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_CAMINHO_FOTO_LOGO));
         this.nomeSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_NOME));
         this.urlSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_URL));
         this.loginSite = cursor.getString(cursor.getColumnIndex(Metadata.FIELD_LOGIN));
@@ -35,6 +42,7 @@ public class Site implements Parcelable {
     }
 
     public Site (JSONObject jsonObject) {
+        this.nomeSite = jsonObject.optString(Metadata.JSONFIELD_NOME);
         this.urlSite = jsonObject.optString(Metadata.JSONFIELD_URL);
         this.loginSite = jsonObject.optString(Metadata.JSONFIELD_LOGIN);
         this.senhaSite = jsonObject.optString(Metadata.JSONFIELD_SENHA);
@@ -47,6 +55,8 @@ public class Site implements Parcelable {
             this.id = in.readLong();
         }
         this.idUsuario = in.readString();
+        this.logoSite = in.readParcelable(ClassLoader.getSystemClassLoader());
+        this.caminhoFoto = in.readString();
         this.nomeSite = in.readString();
         this.urlSite = in.readString();
         this.loginSite = in.readString();
@@ -80,6 +90,25 @@ public class Site implements Parcelable {
 
     public Site setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+        return this;
+    }
+
+    @IgnorePersistence
+    public Bitmap getLogoSite() {
+        return logoSite;
+    }
+
+    public Site setLogoSite(Bitmap logoSite) {
+        this.logoSite = logoSite;
+        return this;
+    }
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public Site setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
         return this;
     }
 
@@ -143,7 +172,9 @@ public class Site implements Parcelable {
             dest.writeLong(id);
         }
         dest.writeParcelable(this.usuario, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+        dest.writeParcelable((Parcelable) this.logoSite, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
         dest.writeString(this.idUsuario);
+        dest.writeString(this.caminhoFoto);
         dest.writeString(this.nomeSite);
         dest.writeString(this.urlSite);
         dest.writeString(this.loginSite);
@@ -157,6 +188,7 @@ public class Site implements Parcelable {
         String PK_ALIAS = "idSite";
         String FIELD_ID = "id";
         String FIELD_ID_USUARIO = "idUsuario";
+        String FIELD_CAMINHO_FOTO_LOGO = "caminhoFoto";
         String FIELD_NOME = "nomeSite";
         String FIELD_URL = "urlSite";
         String FIELD_LOGIN = "loginSite";
@@ -164,6 +196,7 @@ public class Site implements Parcelable {
         String ORDER_BY_ASC = "ASC";
         String ORDER_BY_DESC = "DESC";
 
+        String JSONFIELD_NOME = "name";
         String JSONFIELD_URL = "url";
         String JSONFIELD_LOGIN = "email";
         String JSONFIELD_SENHA = "password";

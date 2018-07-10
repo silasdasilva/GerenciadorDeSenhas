@@ -53,4 +53,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     //Atualizando dependencia para importar a classe Hex
     implementation 'commons-codec:commons-codec:1.11'
+    //Imagem redonda
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }

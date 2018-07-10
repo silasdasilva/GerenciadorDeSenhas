@@ -3,6 +3,8 @@ package com.project.silas.gerenciadordesenhas.business;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.BuildConfig;
@@ -10,11 +12,15 @@ import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
+import com.project.silas.gerenciadordesenhas.exceptions.LoginException;
 import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
 import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +31,7 @@ public class CadastroSiteBusiness {
     private Usuario usuarioLogado;
 
     protected BackendIntegrator backendIntegrator;
+    private FileBusiness fileBusiness;
 
     private SiteDao siteDao;
 
@@ -34,6 +41,7 @@ public class CadastroSiteBusiness {
         this.siteDao = new SiteDao(this.bancoDeDados);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
         this.backendIntegrator = new BackendIntegrator(this.contexto);
+        this.fileBusiness = new FileBusiness(this.contexto);
     }
 
     public OperationResult<Site> insereSite(Site siteInsercao) {
@@ -44,19 +52,10 @@ public class CadastroSiteBusiness {
         try {
             this.bancoDeDados.beginTransaction();
 
-            Map<String, String> requestPayload = new HashMap<>();
-            requestPayload.put("url", siteInsercao.getUrlSite());
-            requestPayload.put("nome", siteInsercao.getNomeSite());
-            requestPayload.put("login", siteInsercao.getLoginSite());
-            requestPayload.put("senha", siteInsercao.getSenhaSite());
-
-            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", requestPayload, null);
-
-            if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
-
-            Log.i("loginBusiness", "JSON recebido: " + response);
-
-            Site site = new Site(response);
+            Log.i("siteBusiness", "Confere dados:\n"
+                    + "\nId Usuário: " + this.usuarioLogado.getId()
+                    + "\nUrl: " + siteInsercao.getUrlSite()
+                    + "\nLogin: " + siteInsercao.getLoginSite());
 
             cursor = this.siteDao.rawQuery(Query.CONFERE_EXISTENCIA_URL_E_LOGIN
                     , new String[]{String.valueOf(this.usuarioLogado.getId()) // WHERE
@@ -64,9 +63,11 @@ public class CadastroSiteBusiness {
                             , siteInsercao.getLoginSite()}); // AND
 
             cursor.moveToFirst();
-            if (cursor.getInt(cursor.getColumnIndex("verificaExistencia")) > 0) throw new CadastroException("Já existe esse site para este usuário!");
+            if (cursor != null && cursor.getCount() > 0) throw new CadastroException("Já existe esse login para este usuário!");
 
-            long idSite = this.siteDao.insertWithOnConflict(site, SQLiteDatabase.CONFLICT_REPLACE);
+            this.bancoDeDados.execSQL("ALTER TABLE Site ADD nomeSite varchar (255)");
+
+            long idSite = this.siteDao.insert(siteInsercao);
 
             /*this.bancoDeDados.execSQL(Query.INSERIR_SITE,
                     new String[]{String.valueOf(this.usuarioLogado.getId())
@@ -77,7 +78,7 @@ public class CadastroSiteBusiness {
             cursor = this.siteDao.rawQuery(Query.CONFERE_INSERCAO, new String[]{String.valueOf(idSite)}); // WHERE
 
             cursor.moveToFirst();
-            if (cursor.getInt(cursor.getColumnIndex("verificacaoId")) <= 0) throw new CadastroException("Site não pôde ser cadastrado");
+            if (cursor.getCount() <= 0) throw new CadastroException("Site não pôde ser cadastrado");
 
             Log.i("siteBusiness", "Número de sites cadastrados: " + cursor.getCount());
 
@@ -171,6 +172,36 @@ public class CadastroSiteBusiness {
         return retornoExclusao;
     }
 
+    private OperationResult<Bitmap> buscaLogoSite(Site siteLogo){
+        OperationResult<Bitmap> retornoLogin = new OperationResult<>();
+        Cursor cursor = null;
+
+        try{
+            this.bancoDeDados.beginTransaction();
+
+            Drawable response = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "login/{" + siteLogo.getNomeSite() + "}");
+            Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (response == null ? "Não" : "Sim"));
+
+            if (response != null) {
+                Log.i("siteBusiness", "Logo: " + response.getCurrent());
+                retornoLogin = this.fileBusiness.salvarLogoSite(response, siteLogo);
+            } else {
+                retornoLogin = this.fileBusiness.buscaLogoSiteDisco(siteLogo);
+            }
+
+            this.bancoDeDados.setTransactionSuccessful();
+
+        } catch (Throwable error){
+            error.printStackTrace();
+            Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
+            retornoLogin.withError(error);
+        } finally {
+            if (cursor != null) cursor.close();
+            this.bancoDeDados.endTransaction();
+        }
+        return retornoLogin;
+    }
+
     public interface Query {
 
 
@@ -192,12 +223,12 @@ public class CadastroSiteBusiness {
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO + " = ?"
                 + " AND " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID + " = ?";
 
-        String CONFERE_EXISTENCIA_URL_E_LOGIN = "SELECT COUNT(*) AS verificaExistencia FROM " + Site.Metadata.TABLE_NAME
+        String CONFERE_EXISTENCIA_URL_E_LOGIN = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO + " = ?"
                 + " AND " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_URL + " = ?"
                 + " AND " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_LOGIN + " = ?";
 
-        String CONFERE_INSERCAO = "SELECT COUNT(*) AS verificacaoId FROM " + Site.Metadata.TABLE_NAME
+        String CONFERE_INSERCAO = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID + " = ?";
 
         String CONFERE_ATUALIZACAO = "SELECT COUNT(*) AS verificacaoId FROM " + Site.Metadata.TABLE_NAME

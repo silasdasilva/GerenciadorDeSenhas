@@ -73,19 +73,6 @@ public class CadastroUsuariosBusiness {
             if (!usuarioCadastro.getSenhaUsuario().matches(".*[0-9]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 número");
             if (!usuarioCadastro.getSenhaUsuario().matches(".*[^0-9A-Za-z]{1,}.*")) throw new CadastroException("A senha deve conter ao menos 1 caractere especial");
 
-            // Se tudo certo insere usuario
-
-            String timeStamp = String.valueOf(new Date().getTime());
-            String emailUsuario = usuarioCadastro.getEmailUsuario();
-            String token = "";
-
-            for (int posicao = 0; posicao < timeStamp.length(); posicao++) {
-                token += emailUsuario.substring(posicao, posicao + 1) + timeStamp.substring(posicao, posicao + 1);
-            }
-
-            Log.i("cadastroBusiness", "Token: " + token);
-            usuarioCadastro.setTokenUsuario(token);
-
             requestData.put("name", usuarioCadastro.getNomeUsuario());
             requestData.put("email", usuarioCadastro.getEmailUsuario());
             requestData.put("password", usuarioCadastro.getSenhaUsuario());
@@ -94,6 +81,7 @@ public class CadastroUsuariosBusiness {
             if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
 
             Log.i("cadastroBusiness", "JSON recebido: " + response);
+            usuarioCadastro.setTokenUsuario(response.optString("token"));
 
             long idUsuario = this.usuarioDao.insert(usuarioCadastro);
 

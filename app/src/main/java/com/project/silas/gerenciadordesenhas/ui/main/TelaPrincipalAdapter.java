@@ -2,13 +2,16 @@ package com.project.silas.gerenciadordesenhas.ui.main;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
@@ -117,26 +120,41 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageView ivItemLogoTelaPrincipal;
         private TextView tvItemUrlTelaPrincipal;
         private TextView tvItemLoginTelaPrincipal;
-        private TextView tvItemSenhaTelaPrincipal;
         private Site site;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            ivItemLogoTelaPrincipal = itemView.findViewById(R.id.iv_item_logo_tela_principal);
             tvItemUrlTelaPrincipal = itemView.findViewById(R.id.tv_item_url_tela_principal);
             tvItemLoginTelaPrincipal = itemView.findViewById(R.id.tv_item_login_tela_principal);
-            tvItemSenhaTelaPrincipal = itemView.findViewById(R.id.tv_item_senha_tela_principal);
         }
 
 
         private void bindInspecao(Site site) {
             this.site = site;
 
+            TelaPrincipalAdapter.this.telaPrincipalManager.buscarLogoSite(this.site, new OperationListener<Bitmap>(){
+                @Override
+                public void onSuccess(Bitmap result) {
+                    if (result != null){
+                        ivItemLogoTelaPrincipal.setImageBitmap(result);
+                    }
+                }
+
+                @Override
+                public void onError(Throwable error) {
+                    super.onError(error);
+                    error.printStackTrace();
+                    Toast.makeText(TelaPrincipalAdapter.this.contexto, "Erro ao carregar logo do site! Verifique sua internet", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             tvItemUrlTelaPrincipal.setText(site.getUrlSite());
             tvItemLoginTelaPrincipal.setText(site.getLoginSite());
-            tvItemSenhaTelaPrincipal.setText(site.getSenhaSite());
 
             customizarSelecao();
         }

@@ -3,18 +3,22 @@ package com.project.silas.gerenciadordesenhas.business;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
+import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
 
 public class TelaPrincipalBusiness {
 
     private Context contexto;
     private SQLiteDatabase bancoDados;
     private SiteDao siteDao;
+
+    private BackendIntegrator backendIntegrator;
 
     private Usuario usuarioLogado;
 
@@ -23,6 +27,7 @@ public class TelaPrincipalBusiness {
         this.bancoDados = InicializacaoBusiness.getDatabase();
         this.siteDao = new SiteDao(this.bancoDados);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
+        this.backendIntegrator = new BackendIntegrator(this.contexto);
     }
 
     public OperationResult<Cursor> buscarLogins(String queryPesquisa) {

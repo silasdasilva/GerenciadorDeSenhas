@@ -1,7 +1,9 @@
 package com.project.silas.gerenciadordesenhas.ui.site;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,15 +12,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
+import com.project.silas.gerenciadordesenhas.business.FileBusiness;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
+import com.project.silas.gerenciadordesenhas.core.OperationResult;
+import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.CadastroSiteManager;
+import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
 import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
 
 import butterknife.BindView;
@@ -26,8 +33,11 @@ import butterknife.ButterKnife;
 
 public class CadastroSiteActivity extends AppCompatActivity {
 
-    @BindView(R.id.tv_exclusao_cadastro_site)
-    protected TextView tvExclusaoCadastroSite;
+    @BindView(R.id.iv_item_logo_tela_principal)
+    protected ImageView ivLogoSiteCadastroSite;
+
+    @BindView(R.id.tiet_nome_cadastro_site)
+    protected TextInputEditText tietNomeCadastroSite;
 
     @BindView(R.id.tiet_url_cadastro_site)
     protected TextInputEditText tietUrlCadastroSite;
@@ -51,6 +61,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
 
     private CadastroSiteManager cadastroSiteManager;
     private AlertDialog.Builder alerta;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,27 +73,30 @@ public class CadastroSiteActivity extends AppCompatActivity {
         this.cadastroSiteManager = new CadastroSiteManager(this);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
 
-        this.siteModificacao = new Site();
-        if (getIntent().getExtras().get(CHAVE_REGISTRO_SITE) != null) {
+        if (getIntent().getExtras() != null) {
             this.siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             preencheProperties();
         }
 
         btSalvarCadastroSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exibirProgressDialog();
                 if (totalAlteracoes() == 3) {
-                    siteModificacao.setIdUsuario(String.valueOf(SessionSingletonBusiness.getUsuario()))
-                            .setUrlSite(tietUrlCadastroSite.getText().toString())
-                            .setLoginSite(tietLoginCadastroSite.getText().toString())
-                            .setSenhaSite(tietSenhaCadastroSite.getText().toString());
+                    if (siteModificacao != null) {
+                        siteModificacao.setIdUsuario(String.valueOf(SessionSingletonBusiness.getUsuario().getId()))
+                                .setNomeSite(tietNomeCadastroSite.getText().toString())
+                                .setUrlSite(tietUrlCadastroSite.getText().toString())
+                                .setLoginSite(tietLoginCadastroSite.getText().toString())
+                                .setSenhaSite(tietSenhaCadastroSite.getText().toString());
 
-                    if (getIntent().getExtras().get(CHAVE_REGISTRO_SITE) != null) {
                         cadastroSiteManager.atualizaSite(siteModificacao, new OperationListener<Site>() {
                             @Override
                             public void onSuccess(Site result) {
                                 Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
                                 setResult(RESULT_OK, intent);
+                                progressDialog.dismiss();
                                 finish();
                                 Toast.makeText(CadastroSiteActivity.this, "Site atualizado com sucesso!", Toast.LENGTH_SHORT).show();
                             }
@@ -91,6 +105,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
                             public void onError(Throwable error) {
                                 super.onError(error);
                                 error.printStackTrace();
+                                progressDialog.dismiss();
                                 Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -101,6 +116,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
                         public void onSuccess(Site result) {
                             Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
                             setResult(RESULT_OK, intent);
+                            progressDialog.dismiss();
                             finish();
                             Toast.makeText(CadastroSiteActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
                         }
@@ -109,7 +125,8 @@ public class CadastroSiteActivity extends AppCompatActivity {
                         public void onError(Throwable error) {
                             super.onError(error);
                             error.printStackTrace();
-                            Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            Toast.makeText(CadastroSiteActivity.this, "Erro ao inserir site", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -126,9 +143,35 @@ public class CadastroSiteActivity extends AppCompatActivity {
     }
 
     private void preencheProperties() {
-        tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
-        tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
-        tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
+        if (siteModificacao != null) {
+            tietNomeCadastroSite.setText(this.siteModificacao.getNomeSite());
+            tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
+            tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
+            tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
+
+            if (siteModificacao.getCaminhoFoto() != null && !siteModificacao.getCaminhoFoto().equals("null") && !siteModificacao.getCaminhoFoto().equals("")){
+                new TelaPrincipalManager(this).buscarLogoSite(siteModificacao, new OperationListener<Bitmap>(){
+                    @Override
+                    public void onSuccess(Bitmap result) {
+                        if (result != null){
+                            ivLogoSiteCadastroSite.setImageBitmap(result);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        error.printStackTrace();
+                        Toast.makeText(CadastroSiteActivity.this, "Foto não encontrada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+    }
+
+    private void exibirProgressDialog(){
+        this.progressDialog = new CustomDialog(this).progress();
+        this.progressDialog.setMessage(getString(R.string.st_mensagem_progressdialog_tela_principal));
+        this.progressDialog.show();
     }
 
     @Override
@@ -173,17 +216,27 @@ public class CadastroSiteActivity extends AppCompatActivity {
 
     private int totalAlteracoes() {
         int alteracoes = 0;
-        if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")
-                && !tietUrlCadastroSite.getText().toString().equals(this.siteModificacao.getUrlSite())) {
-            alteracoes++;
-        }
-        if (!tietLoginCadastroSite.getText().toString().equals("") && !tietLoginCadastroSite.getText().toString().equals("null")
-                && !tietLoginCadastroSite.getText().toString().equals(this.siteModificacao.getLoginSite())) {
-            alteracoes++;
-        }
-        if (!tietSenhaCadastroSite.getText().toString().equals("") && !tietSenhaCadastroSite.getText().toString().equals("null")
-                && !tietSenhaCadastroSite.getText().toString().equals(this.siteModificacao.getSenhaSite())) {
-            alteracoes++;
+        if (this.siteModificacao != null) {
+            if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")
+                    && !tietUrlCadastroSite.getText().toString().equals(this.siteModificacao.getUrlSite())) {
+                alteracoes++;
+            }
+            if (!tietLoginCadastroSite.getText().toString().equals("") && !tietLoginCadastroSite.getText().toString().equals("null")
+                    && !tietLoginCadastroSite.getText().toString().equals(this.siteModificacao.getLoginSite())) {
+                alteracoes++;
+            }
+            if (!tietSenhaCadastroSite.getText().toString().equals("") && !tietSenhaCadastroSite.getText().toString().equals("null")
+                    && !tietSenhaCadastroSite.getText().toString().equals(this.siteModificacao.getSenhaSite())) {
+                alteracoes++;
+            }
+        } else {
+            if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")) alteracoes++;
+            if (!tietLoginCadastroSite.getText().toString().equals("") && !tietLoginCadastroSite.getText().toString().equals("null")) alteracoes++;
+            if (!tietSenhaCadastroSite.getText().toString().equals("") && !tietSenhaCadastroSite.getText().toString().equals("null")) alteracoes++;
+            this.siteModificacao = new Site().setNomeSite(tietNomeCadastroSite.getText().toString())
+                    .setUrlSite(tietUrlCadastroSite.getText().toString())
+                    .setLoginSite(tietLoginCadastroSite.getText().toString())
+                    .setSenhaSite(tietSenhaCadastroSite.getText().toString());
         }
         return alteracoes;
     }
