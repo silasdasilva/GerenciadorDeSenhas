@@ -10,43 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5f69940-9ac5-4562-83c1-e0e1dae9ca90" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_makeramen_roundedimageview_2_3_0.xml" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/InicializacaoBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/InicializacaoBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/LoginUsuariosBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/LoginUsuariosBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/TelaPrincipalBusiness.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/TelaPrincipalBusiness.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/LoginUsuariosManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/LoginUsuariosManager.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/SplashScreenActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/SplashScreenActivity.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/CadastroUsuariosActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/CadastroUsuariosActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/LoginUsuariosActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/LoginUsuariosActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/cadastro_site_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cadastro_site_activity.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/tela_principal_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tela_principal_activity.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/tela_principal_item_activity.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/tela_principal_item_activity.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings_tela_principal.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings_tela_principal.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -79,11 +54,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BackendIntegrator.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BackendIntegrator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="138" column="19" lean-forward="false" selection-start-line="138" selection-start-column="19" selection-end-line="138" selection-end-column="19" />
+            <state relative-caret-position="472">
+              <caret line="152" column="62" lean-forward="false" selection-start-line="152" selection-start-column="62" selection-end-line="152" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -92,28 +67,51 @@
       <file leaf-file-name="CadastroSiteBusiness.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
-              <caret line="67" column="53" lean-forward="false" selection-start-line="67" selection-start-column="52" selection-end-line="67" selection-end-column="53" />
+            <state relative-caret-position="278">
+              <caret line="182" column="106" lean-forward="false" selection-start-line="182" selection-start-column="106" selection-end-line="182" selection-end-column="106" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Site.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java">
+      <file leaf-file-name="TelaPrincipalActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+            <state relative-caret-position="173">
+              <caret line="213" column="101" lean-forward="false" selection-start-line="213" selection-start-column="101" selection-end-line="213" selection-end-column="101" />
+              <folding>
+                <element signature="e#5041#5481#0" expanded="true" />
+                <element signature="e#5480#5481#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CadastroSiteActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="152" column="47" lean-forward="false" selection-start-line="152" selection-start-column="47" selection-end-line="152" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InicializacaoBusiness.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/InicializacaoBusiness.java">
+      <file leaf-file-name="TelaPrincipalManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="62" column="123" lean-forward="false" selection-start-line="62" selection-start-column="123" selection-end-line="62" selection-end-column="123" />
+            <state relative-caret-position="295">
+              <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TelaPrincipalAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="71" column="34" lean-forward="false" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -122,33 +120,19 @@
       <file leaf-file-name="CadastroSiteManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/CadastroSiteManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="25" column="24" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
+            <state relative-caret-position="324">
+              <caret line="47" column="68" lean-forward="false" selection-start-line="47" selection-start-column="68" selection-end-line="47" selection-end-column="68" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CadastroSiteActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java">
+      <file leaf-file-name="CadastroUsuariosBusiness.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="235" column="35" lean-forward="false" selection-start-line="235" selection-start-column="35" selection-end-line="235" selection-end-column="35" />
-              <folding>
-                <element signature="e#3105#6016#0" expanded="true" />
-                <element signature="e#6015#6016#0" expanded="true" />
-                <element signature="e#6070#6219#0" expanded="true" />
-                <element signature="e#6218#6219#0" expanded="true" />
-                <element signature="e#7625#7686#0" expanded="true" />
-                <element signature="e#8196#8239#0" expanded="true" />
-                <element signature="e#8273#8323#0" expanded="true" />
-                <element signature="e#8364#8404#0" expanded="true" />
-                <element signature="e#8406#8822#0" expanded="true" />
-                <element signature="e#8821#8822#0" expanded="true" />
-                <element signature="e#8863#8903#0" expanded="true" />
-                <element signature="e#8905#9152#0" expanded="true" />
-                <element signature="e#9151#9152#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="983">
+              <caret line="92" column="35" lean-forward="false" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="35" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2215,23 +2199,23 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/FormEdicaoSiteActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings_tela_principal.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/TelaPrincipalBusiness.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/tela_principal_activity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/LoginUsuariosManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/LoginUsuariosBusiness.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/CadastroUsuariosActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/LoginUsuariosActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/cadastro_site_activity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/InicializacaoBusiness.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java" />
       </list>
     </option>
   </component>
@@ -2359,9 +2343,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2575,11 +2559,10 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960597" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4101291" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39225423" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2597,6 +2580,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960597" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -2608,7 +2592,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java</url>
-          <line>73</line>
+          <line>76</line>
           <properties />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
@@ -2708,7 +2692,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1">
           <caret line="73" column="16" lean-forward="false" selection-start-line="73" selection-start-column="16" selection-end-line="73" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2732,7 +2715,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="246" column="23" lean-forward="false" selection-start-line="246" selection-start-column="23" selection-end-line="246" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2798,25 +2780,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/edicao_site_activity.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="214" column="73" lean-forward="false" selection-start-line="214" selection-start-column="73" selection-end-line="214" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/FormEdicaoSiteActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="65" column="14" lean-forward="false" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/edicao_site_activity.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/FormEdicaoSiteActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="449">
@@ -2863,35 +2828,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="93" column="35" lean-forward="false" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="50" column="76" lean-forward="false" selection-start-line="50" selection-start-column="76" selection-end-line="50" selection-end-column="76" />
-          <folding>
-            <element signature="e#2002#2464#0" expanded="false" />
-            <element signature="e#2463#2464#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="151" column="125" lean-forward="false" selection-start-line="151" selection-start-column="125" selection-end-line="151" selection-end-column="125" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/TelaPrincipalBusiness.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
@@ -2927,14 +2863,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="85" column="67" lean-forward="false" selection-start-line="85" selection-start-column="52" selection-end-line="85" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/CadastroUsuariosActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-338">
@@ -2958,14 +2886,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="138" column="19" lean-forward="false" selection-start-line="138" selection-start-column="19" selection-end-line="138" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/user/LoginUsuariosActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="257">
@@ -2981,7 +2901,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="292">
           <caret line="28" column="89" lean-forward="true" selection-start-line="28" selection-start-column="89" selection-end-line="28" selection-end-column="89" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2993,44 +2912,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="321" column="35" lean-forward="false" selection-start-line="321" selection-start-column="35" selection-end-line="321" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/CadastroSiteManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="25" column="24" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="235" column="35" lean-forward="false" selection-start-line="235" selection-start-column="35" selection-end-line="235" selection-end-column="35" />
-          <folding>
-            <element signature="e#3105#6016#0" expanded="true" />
-            <element signature="e#6015#6016#0" expanded="true" />
-            <element signature="e#6070#6219#0" expanded="true" />
-            <element signature="e#6218#6219#0" expanded="true" />
-            <element signature="e#7625#7686#0" expanded="true" />
-            <element signature="e#8196#8239#0" expanded="true" />
-            <element signature="e#8273#8323#0" expanded="true" />
-            <element signature="e#8364#8404#0" expanded="true" />
-            <element signature="e#8406#8822#0" expanded="true" />
-            <element signature="e#8821#8822#0" expanded="true" />
-            <element signature="e#8863#8903#0" expanded="true" />
-            <element signature="e#8905#9152#0" expanded="true" />
-            <element signature="e#9151#9152#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/core/abstracts/DaoAbstract.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
@@ -3039,10 +2920,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="67" column="53" lean-forward="false" selection-start-line="67" selection-start-column="52" selection-end-line="67" selection-end-column="53" />
+        <state relative-caret-position="188">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroUsuariosBusiness.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="983">
+          <caret line="92" column="35" lean-forward="false" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/CadastroSiteManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="47" column="68" lean-forward="false" selection-start-line="47" selection-start-column="68" selection-end-line="47" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="71" column="34" lean-forward="false" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -3055,10 +2960,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/entity/Site.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/managers/TelaPrincipalManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+        <state relative-caret-position="295">
+          <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/main/TelaPrincipalActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="213" column="101" lean-forward="false" selection-start-line="213" selection-start-column="101" selection-end-line="213" selection-end-column="101" />
+          <folding>
+            <element signature="e#5041#5481#0" expanded="true" />
+            <element signature="e#5480#5481#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/CadastroSiteBusiness.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="182" column="106" lean-forward="false" selection-start-line="182" selection-start-column="106" selection-end-line="182" selection-end-column="106" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/business/FileBusiness.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="41" column="45" lean-forward="false" selection-start-line="41" selection-start-column="45" selection-end-line="41" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/ui/site/CadastroSiteActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="152" column="47" lean-forward="false" selection-start-line="152" selection-start-column="47" selection-end-line="152" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/project/silas/gerenciadordesenhas/repository/network/BackendIntegrator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="152" column="62" lean-forward="false" selection-start-line="152" selection-start-column="62" selection-end-line="152" selection-end-column="62" />
           <folding />
         </state>
       </provider>

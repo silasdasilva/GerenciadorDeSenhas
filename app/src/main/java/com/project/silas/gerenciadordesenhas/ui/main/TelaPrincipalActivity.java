@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -60,7 +61,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     private TelaPrincipalAdapter adaptador;
     private ProgressDialog progressDialog;
     private GridLayoutManager gridLayoutManager;
-    private FingerprintManager fingerprintManager;
+    private TelaPrincipalManager telaPrincipalManager;
 
     private long idSiteSelecionado = -1;
     private String ultimaPesquisa = "";
@@ -75,6 +76,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.tela_principal_activity);
         ButterKnife.bind(this);
         rvTelaPrincpal.setHasFixedSize(true);
+        this.telaPrincipalManager = new TelaPrincipalManager(this);
 
         if (SessionSingletonBusiness.getUsuario() != null){
             this.usuarioLogado = SessionSingletonBusiness.getUsuario();
@@ -306,8 +308,8 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         } else {
             this.adaptador.procuraSite(this.idSiteSelecionado);
             if (this.adaptador.getSiteSelecionado() == null) {
-                fabMenuTelaPrincipal.close(true);
                 fabExcluirTelaPrincipal.setVisibility(View.GONE);
+                fabMenuTelaPrincipal.close(true);
             }
         }
         this.adaptador.notifyDataSetChanged();
@@ -330,7 +332,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         this.gridLayoutManager = new GridLayoutManager(this, 1);
         rvTelaPrincpal.setLayoutManager(this.gridLayoutManager);
 
-        this.adaptador = new TelaPrincipalAdapter(this, new TelaPrincipalManager(this), this.usuarioLogado, this.ultimaPesquisa, new OperationListener<Void>() {
+        this.adaptador = new TelaPrincipalAdapter(this, this.telaPrincipalManager, this.usuarioLogado, this.ultimaPesquisa, new OperationListener<Void>() {
             @Override
             public void onSuccess(Void result) {
                 rvTelaPrincpal.setAdapter(adaptador);

@@ -65,8 +65,6 @@ public class CadastroSiteBusiness {
             cursor.moveToFirst();
             if (cursor != null && cursor.getCount() > 0) throw new CadastroException("Já existe esse login para este usuário!");
 
-            this.bancoDeDados.execSQL("ALTER TABLE Site ADD nomeSite varchar (255)");
-
             long idSite = this.siteDao.insert(siteInsercao);
 
             /*this.bancoDeDados.execSQL(Query.INSERIR_SITE,
@@ -81,6 +79,8 @@ public class CadastroSiteBusiness {
             if (cursor.getCount() <= 0) throw new CadastroException("Site não pôde ser cadastrado");
 
             Log.i("siteBusiness", "Número de sites cadastrados: " + cursor.getCount());
+
+            buscaLogoSite(siteInsercao);
 
             retornoInsercao.withResult(siteInsercao);
             this.bancoDeDados.setTransactionSuccessful();
@@ -127,6 +127,8 @@ public class CadastroSiteBusiness {
 
             Log.i("siteBusiness", "Número de sites atualizados: " + cursor.getCount());
 
+            buscaLogoSite(siteAtualizacao);
+
             retornoAtualizacao.withResult(siteAtualizado);
             this.bancoDeDados.setTransactionSuccessful();
         } catch (Throwable error){
@@ -172,21 +174,18 @@ public class CadastroSiteBusiness {
         return retornoExclusao;
     }
 
-    private OperationResult<Bitmap> buscaLogoSite(Site siteLogo){
-        OperationResult<Bitmap> retornoLogin = new OperationResult<>();
+    private void buscaLogoSite(Site siteLogo){
         Cursor cursor = null;
 
         try{
             this.bancoDeDados.beginTransaction();
 
-            Drawable response = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "login/{" + siteLogo.getNomeSite() + "}");
+            Drawable response = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "logo/{" + siteLogo.getNomeSite() + "}");
             Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (response == null ? "Não" : "Sim"));
 
             if (response != null) {
                 Log.i("siteBusiness", "Logo: " + response.getCurrent());
-                retornoLogin = this.fileBusiness.salvarLogoSite(response, siteLogo);
-            } else {
-                retornoLogin = this.fileBusiness.buscaLogoSiteDisco(siteLogo);
+                this.fileBusiness.salvarLogoSite(response, siteLogo);
             }
 
             this.bancoDeDados.setTransactionSuccessful();
@@ -194,12 +193,10 @@ public class CadastroSiteBusiness {
         } catch (Throwable error){
             error.printStackTrace();
             Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
-            retornoLogin.withError(error);
         } finally {
             if (cursor != null) cursor.close();
             this.bancoDeDados.endTransaction();
         }
-        return retornoLogin;
     }
 
     public interface Query {
@@ -231,7 +228,7 @@ public class CadastroSiteBusiness {
         String CONFERE_INSERCAO = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID + " = ?";
 
-        String CONFERE_ATUALIZACAO = "SELECT COUNT(*) AS verificacaoId FROM " + Site.Metadata.TABLE_NAME
+        String CONFERE_ATUALIZACAO = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO + " = ?"
                 + " AND " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID + " = ?";
 

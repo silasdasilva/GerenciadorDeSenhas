@@ -8,9 +8,11 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.BuildConfig;
+import com.project.silas.gerenciadordesenhas.business.FileBusiness;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.business.UsuarioBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
+import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToConnectServerException;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToWriteInternalDataException;
@@ -40,7 +42,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class BackendIntegrator {
-    protected Context context;
+    protected Context contexto;
+
     public static final int METHOD_GET = 0;
     public static final int METHOD_POST = 1;
     public static final int METHOD_PUT = 2;
@@ -52,7 +55,7 @@ public class BackendIntegrator {
     private Usuario usuarioLogado;
 
     public BackendIntegrator(Context context) {
-        this.context = context;
+        this.contexto = context;
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.MINUTES)
@@ -79,8 +82,8 @@ public class BackendIntegrator {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.BASE_URL + urlEndpoint);
 
         //Classe responsável por controlar modos de energia, utilizado aqui para modo de economia de energia não travar recebimento de dados do webservice
-        PowerManager pm = (PowerManager) this.context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock bloqueioDeEspera = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, this.context.getClass().getName());
+        PowerManager pm = (PowerManager) this.contexto.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock bloqueioDeEspera = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, this.contexto.getClass().getName());
 
         try {
             if(method == METHOD_POST) {
@@ -120,8 +123,9 @@ public class BackendIntegrator {
         }
     }
 
-    public Drawable syncRequestLogo(int method, String urlEndpoint) throws FailedToConnectServerException {
+    public Drawable syncRequestLogo(int method, String urlEndpoint, Site siteLogo) throws FailedToConnectServerException {
         Drawable logoSite = null;
+        InputStream inputStream = null;
 
         if(!this.isInternetAvailable()) throw new FailedToConnectServerException("Erro ao enviar/receber dados api");
 
@@ -129,8 +133,8 @@ public class BackendIntegrator {
         Request.Builder requestBuilder = new Request.Builder().url(BuildConfig.BASE_URL + urlEndpoint);
 
         //Classe responsável por controlar modos de energia, utilizado aqui para modo de economia de energia não travar recebimento de dados do webservice
-        PowerManager pm = (PowerManager) this.context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock bloqueioDeEspera = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, this.context.getClass().getName());
+        PowerManager pm = (PowerManager) this.contexto.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock bloqueioDeEspera = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, this.contexto.getClass().getName());
 
         try {
             if (method == METHOD_GET) {
@@ -145,14 +149,15 @@ public class BackendIntegrator {
 
             bloqueioDeEspera.acquire();
 
-            String strResponse = response.body().string();
-            Log.e("sRequest", urlEndpoint);
-            Log.e("sResponse", strResponse);
-            JSONObject retorno = new JSONObject(strResponse);
-
-            if(retorno.has("token")) {
-                this.usuarioBusiness.atualizaToken(retorno.optString("token"));
+            if(response.body() != null) {
+                logoSite = response.body().string()/**TERMINAR*/
+                (new FileBusiness(this.contexto)).salvarLogoSite(response, siteLogo);
             }
+
+            Log.e("sRequest", urlEndpoint);
+            Log.e("sResponse", response.toString());
+
+
 
         } catch (Exception e) {
 
