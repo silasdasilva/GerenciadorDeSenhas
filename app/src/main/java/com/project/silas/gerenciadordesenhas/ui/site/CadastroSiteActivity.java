@@ -47,11 +47,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
     private Usuario usuarioLogado;
     private Site siteModificacao;
 
-    public static final String CHAVE_INSERCAO_SITE = "insercaoSite";
-    public static final String CHAVE_ATUALIZACAO_SITE = "atualizacaoSite";
-    public static final String CHAVE_EXCLUSAO_SITE = "exclusaoSite";
-
-    private String chaveUsada;
+    public static final String CHAVE_REGISTRO_SITE = "atualizacaoSite";
 
     private CadastroSiteManager cadastroSiteManager;
     private AlertDialog.Builder alerta;
@@ -66,28 +62,10 @@ public class CadastroSiteActivity extends AppCompatActivity {
         this.cadastroSiteManager = new CadastroSiteManager(this);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
 
-        if (getIntent().getExtras().get(CHAVE_INSERCAO_SITE) != null) {
-            this.chaveUsada = CHAVE_INSERCAO_SITE;
-            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_INSERCAO_SITE);
-        }
-
-        if (getIntent().getExtras().get(CHAVE_ATUALIZACAO_SITE) != null) {
-            this.chaveUsada = CHAVE_ATUALIZACAO_SITE;
-            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_ATUALIZACAO_SITE);
-
-            tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
-            tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
-            tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
-        }
-
-        if (getIntent().getExtras().get(CHAVE_EXCLUSAO_SITE) != null) {
-            this.chaveUsada = CHAVE_EXCLUSAO_SITE;
-            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_EXCLUSAO_SITE);
-            tvExclusaoCadastroSite.setVisibility(View.VISIBLE);
-            tietUrlCadastroSite.setVisibility(View.GONE);
-            tietLoginCadastroSite.setVisibility(View.GONE);
-            tietSenhaCadastroSite.setVisibility(View.GONE);
-            btSalvarCadastroSite.setText(R.string.st_excluir_tela_principal);
+        this.siteModificacao = new Site();
+        if (getIntent().getExtras().get(CHAVE_REGISTRO_SITE) != null) {
+            this.siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
+            preencheProperties();
         }
 
         btSalvarCadastroSite.setOnClickListener(new View.OnClickListener() {
@@ -99,27 +77,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
                             .setLoginSite(tietLoginCadastroSite.getText().toString())
                             .setSenhaSite(tietSenhaCadastroSite.getText().toString());
 
-                    if (chaveUsada.equals(CHAVE_INSERCAO_SITE)) {
-                        cadastroSiteManager.insereSite(siteModificacao, new OperationListener<Site>() {
-                            @Override
-                            public void onSuccess(Site result) {
-                                Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                                Toast.makeText(CadastroSiteActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(Throwable error) {
-                                super.onError(error);
-                                error.printStackTrace();
-                                Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        return;
-                    }
-
-                    if (chaveUsada.equals(CHAVE_ATUALIZACAO_SITE)) {
+                    if (getIntent().getExtras().get(CHAVE_REGISTRO_SITE) != null) {
                         cadastroSiteManager.atualizaSite(siteModificacao, new OperationListener<Site>() {
                             @Override
                             public void onSuccess(Site result) {
@@ -136,18 +94,15 @@ public class CadastroSiteActivity extends AppCompatActivity {
                                 Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
-                        return;
                     }
-                }
 
-                if (chaveUsada.equals(CHAVE_EXCLUSAO_SITE)) {
-                    cadastroSiteManager.excluiSite(siteModificacao, new OperationListener<Site>() {
+                    cadastroSiteManager.insereSite(siteModificacao, new OperationListener<Site>() {
                         @Override
                         public void onSuccess(Site result) {
                             Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
                             setResult(RESULT_OK, intent);
                             finish();
-                            Toast.makeText(CadastroSiteActivity.this, "Site excluído com sucesso!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CadastroSiteActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -157,6 +112,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
                             Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+
                 }
             }
         });
@@ -167,6 +123,12 @@ public class CadastroSiteActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private void preencheProperties() {
+        tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
+        tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
+        tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
     }
 
     @Override
@@ -181,12 +143,6 @@ public class CadastroSiteActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         try {
-            if (chaveUsada.equals(CHAVE_EXCLUSAO_SITE) || totalAlteracoes() <= 0) {
-                Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
-                setResult(RESULT_CANCELED, intent);
-                finish();
-                return;
-            }
 
             this.alerta = new AlertDialog.Builder(this);
             this.alerta.setTitle(getString(R.string.st_alerta_cadastro_site))
@@ -217,7 +173,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
 
     private int totalAlteracoes() {
         int alteracoes = 0;
-        if (!tietUrlCadastroSite.getText().toString().equals("")  && !tietUrlCadastroSite.getText().toString().equals("null")
+        if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")
                 && !tietUrlCadastroSite.getText().toString().equals(this.siteModificacao.getUrlSite())) {
             alteracoes++;
         }

@@ -89,7 +89,7 @@ public class CadastroUsuariosBusiness {
             requestData.put("name", usuarioCadastro.getNomeUsuario());
             requestData.put("email", usuarioCadastro.getEmailUsuario());
             requestData.put("password", usuarioCadastro.getSenhaUsuario());
-            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "register", requestData);
+            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "register", requestData, null);
 
             if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
 

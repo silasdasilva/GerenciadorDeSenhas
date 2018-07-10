@@ -4,6 +4,7 @@
     <!--Alerts-->
     <string name="st_mensagem_progressdialog_tela_principal">Aguarde enquanto os Sites são carregados</string>
     <string name="st_mensagem_sair_tela_principal">Tem certeza que deseja voltar?</string>
+    <string name="st_mensagem_exclusao_tela_principal">Tem certeza que deseja excluir esse site?</string>
     <string name="st_alerta_tela_principal">ATENÇÃO!</string>
     <string name="st_sim_tela_principal">Sim</string>
     <string name="st_nao_tela_principal">Não</string>

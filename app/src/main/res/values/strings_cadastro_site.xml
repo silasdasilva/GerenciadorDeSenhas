@@ -3,7 +3,6 @@
 
     <!--Alerts-->
     <string name="st_mensagem_sair_cadastro_site">Tem certeza que deseja voltar? As informações serão perditas!</string>
-    <string name="st_mensagem_exclusao_site">Tem certeza que deseja excluir esse site?</string>
     <string name="st_alerta_cadastro_site">ATENÇÃO!</string>
     <string name="st_sim_cadastro_site">Sim</string>
     <string name="st_nao_cadastro_site">Não</string>

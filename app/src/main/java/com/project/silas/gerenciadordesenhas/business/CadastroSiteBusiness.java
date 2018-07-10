@@ -50,7 +50,7 @@ public class CadastroSiteBusiness {
             requestPayload.put("login", siteInsercao.getLoginSite());
             requestPayload.put("senha", siteInsercao.getSenhaSite());
 
-            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", requestPayload);
+            JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_GET, "logo/{" + siteInsercao.getNomeSite() + "}", requestPayload, null);
 
             if (response == null || response.optString("type").equals("error")) throw new CadastroException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
 

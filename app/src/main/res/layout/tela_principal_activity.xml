@@ -49,9 +49,10 @@
             android:id="@+id/fab_editar_tela_principal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_mode_edit"
+            android:visibility="invisible"
             app:fab_colorNormal="@color/colorPrimaryDark"
             app:fab_colorPressed="@color/colorPrimaryDark"
-            android:src="@drawable/ic_mode_edit"
             app:fab_label="@string/st_editar_tela_principal" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -59,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_circle_outline"
+            android:visibility="invisible"
             app:fab_colorNormal="@color/colorPrimaryDark"
             app:fab_colorPressed="@color/colorPrimaryDark"
             app:fab_label="@string/st_excluir_tela_principal" />

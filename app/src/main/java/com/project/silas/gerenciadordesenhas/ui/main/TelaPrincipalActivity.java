@@ -26,6 +26,7 @@ import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
+import com.project.silas.gerenciadordesenhas.managers.CadastroSiteManager;
 import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
 import com.project.silas.gerenciadordesenhas.ui.site.CadastroSiteActivity;
 import com.project.silas.gerenciadordesenhas.ui.utils.RecyclerItemClickListener;
@@ -53,7 +54,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
     @BindView(R.id.cv_lista_vazia_tela_princpal)
     protected ConstraintLayout cvListaVaziaTelaPrincipal;
 
-    private static final int CODIGO_RETORNO_MODIFICACAO = 152;
+    private static final int CODIGO_RETORNO_REGISTRO = 152;
 
     private Usuario usuarioLogado;
     private TelaPrincipalAdapter adaptador;
@@ -120,8 +121,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                intent.putExtra(CadastroSiteActivity.CHAVE_INSERCAO_SITE, new Site());
-                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
+                startActivityForResult(intent, CODIGO_RETORNO_REGISTRO);
             }
         });
 
@@ -129,17 +129,46 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                intent.putExtra(CadastroSiteActivity.CHAVE_ATUALIZACAO_SITE, adaptador.getSiteSelecionado());
-                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
+                intent.putExtra(CadastroSiteActivity.CHAVE_REGISTRO_SITE, adaptador.getSiteSelecionado());
+                startActivityForResult(intent, CODIGO_RETORNO_REGISTRO);
             }
         });
 
         fabExcluirTelaPrincipal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                intent.putExtra(CadastroSiteActivity.CHAVE_EXCLUSAO_SITE, adaptador.getSiteSelecionado());
-                startActivityForResult(intent, CODIGO_RETORNO_MODIFICACAO);
+                new AlertDialog.Builder(TelaPrincipalActivity.this)
+                        .setTitle(getString(R.string.st_alerta_tela_principal))
+                        .setMessage(getString(R.string.st_mensagem_exclusao_tela_principal))
+                        .setPositiveButton(getString(R.string.st_sim_tela_principal), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new CadastroSiteManager(TelaPrincipalActivity.this).excluiSite(adaptador.getSiteSelecionado(), new OperationListener<Site>() {
+                                    @Override
+                                    public void onSuccess(Site result) {
+                                        configuraLayoutAndAdapter();
+                                        Toast.makeText(TelaPrincipalActivity.this, "Site excluído com sucesso!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        super.onError(error);
+                                        error.printStackTrace();
+                                        Toast.makeText(TelaPrincipalActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.st_nao_tela_principal), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create()
+                        .show();
+
             }
         });
 
@@ -186,8 +215,9 @@ public class TelaPrincipalActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CODIGO_RETORNO_MODIFICACAO && resultCode == CadastroSiteActivity.RESULT_OK) {
+        if (requestCode == CODIGO_RETORNO_REGISTRO && resultCode == CadastroSiteActivity.RESULT_OK) {
             configuraLayoutAndAdapter();
+            return;
         }
 
         if (requestCode == CadastroSiteActivity.RESULT_CANCELED){

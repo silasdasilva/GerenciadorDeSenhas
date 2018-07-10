@@ -103,7 +103,7 @@ public class LoginUsuariosBusiness {
         requestData.put("name", login);
         requestData.put("email", login);
         requestData.put("password", password);
-        JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "login", requestData);
+        JSONObject response = this.backendIntegrator.syncRequest(BackendIntegrator.METHOD_POST, "login", requestData, null);
         if (response == null || response.optString("type").equals("error")) throw new LoginException("Erro ao cadastrar usuário na API. Mensagem: " + response.toString());
 
         Log.i("loginBusiness", "JSON recebido: " + response);
