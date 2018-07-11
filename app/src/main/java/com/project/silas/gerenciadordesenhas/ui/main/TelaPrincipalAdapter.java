@@ -29,7 +29,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
     private Site siteSelecionado;
     private int posicaoClicada = -1;
 
-    public TelaPrincipalAdapter(Context context, TelaPrincipalManager telaPrincipalManager, Usuario usuarioLogado, String queryPesquisa, OperationListener<Void> listenerUI){
+    public TelaPrincipalAdapter(Context context, TelaPrincipalManager telaPrincipalManager, String queryPesquisa, OperationListener<Void> listenerUI){
         this.contexto = context;
         this.telaPrincipalManager = telaPrincipalManager;
         this.setHasStableIds(true);
@@ -41,7 +41,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
         if (this.getItemCount() <= 0 || position < 0) return -1;
         this.cursor.moveToPosition(position);
         if (this.cursor.isAfterLast()) this.cursor.moveToPrevious();
-        return new Site(this.cursor).setUsuario(SessionSingletonBusiness.getUsuario()).getId();
+        return new Site(this.cursor).getId();
     }
 
     @NonNull
@@ -57,7 +57,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
 
         if (this.cursor.getCount() > 0) {
             this.cursor.moveToPosition(position);
-            Site site = new Site(this.cursor).setUsuario(SessionSingletonBusiness.getUsuario());
+            Site site = new Site(this.cursor);
 
             holder.bindInspecao(site);
         }
@@ -92,7 +92,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
             Site site = new Site(this.cursor);
             if (site.getId() == idSiteSelecionado){
                 setPosicaoClicada(this.cursor.getPosition());
-                setSiteSelecionado(site.setUsuario(SessionSingletonBusiness.getUsuario()));
+                setSiteSelecionado(new Site(this.cursor));
                 Log.i("telaPrincipalAdapter", "Site Selecionado: " + this.siteSelecionado.getId());
                 return;
             }
@@ -121,6 +121,7 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivItemLogoTelaPrincipal;
+        private TextView tvItemNomeTelaPrincipal;
         private TextView tvItemUrlTelaPrincipal;
         private TextView tvItemLoginTelaPrincipal;
         private Site site;
@@ -129,18 +130,24 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
             super(itemView);
 
             ivItemLogoTelaPrincipal = itemView.findViewById(R.id.iv_item_logo_tela_principal);
+            tvItemNomeTelaPrincipal = itemView.findViewById(R.id.tv_item_nome_tela_principal);
             tvItemUrlTelaPrincipal = itemView.findViewById(R.id.tv_item_url_tela_principal);
             tvItemLoginTelaPrincipal = itemView.findViewById(R.id.tv_item_login_tela_principal);
         }
 
 
-        private void bindInspecao(Site site) {
+        private void bindInspecao(final Site site) {
             this.site = site;
+
+            tvItemNomeTelaPrincipal.setText(this.site.getNomeSite());
+            tvItemUrlTelaPrincipal.setText(this.site.getUrlSite());
+            tvItemLoginTelaPrincipal.setText(this.site.getLoginSite());
 
             TelaPrincipalAdapter.this.telaPrincipalManager.buscarLogoSite(this.site, new OperationListener<Bitmap>(){
                 @Override
                 public void onSuccess(Bitmap result) {
                     if (result != null){
+                        site.setLogoSite(result);
                         ivItemLogoTelaPrincipal.setImageBitmap(result);
                     }
                 }
@@ -152,9 +159,6 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
                     Toast.makeText(TelaPrincipalAdapter.this.contexto, "Erro ao carregar logo do site! Verifique sua internet", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            tvItemUrlTelaPrincipal.setText(site.getUrlSite());
-            tvItemLoginTelaPrincipal.setText(site.getLoginSite());
 
             customizarSelecao();
         }

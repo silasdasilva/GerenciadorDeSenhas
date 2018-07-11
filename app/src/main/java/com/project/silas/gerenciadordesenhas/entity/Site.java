@@ -14,20 +14,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Site implements Parcelable {
+public class Site implements Serializable, Parcelable {
 
     private Long id;
-    private Usuario usuario;
     private String idUsuario;
-
-    private Bitmap logoSite;
     private String caminhoFoto;
-
     private String nomeSite;
-
     private String urlSite;
     private String loginSite;
     private String senhaSite;
+
+    private Usuario usuario;
+    private Bitmap logoSite;
 
     public Site (){}
 
@@ -55,12 +53,13 @@ public class Site implements Parcelable {
             this.id = in.readLong();
         }
         this.idUsuario = in.readString();
-        this.logoSite = in.readParcelable(ClassLoader.getSystemClassLoader());
         this.caminhoFoto = in.readString();
         this.nomeSite = in.readString();
         this.urlSite = in.readString();
         this.loginSite = in.readString();
         this.senhaSite = in.readString();
+        this.usuario = in.readParcelable(ClassLoader.getSystemClassLoader());
+        this.logoSite = in.readParcelable(ClassLoader.getSystemClassLoader());
     }
 
     public static final Creator<Site> CREATOR = new Creator<Site>() {
@@ -90,16 +89,6 @@ public class Site implements Parcelable {
 
     public Site setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
-        return this;
-    }
-
-    @IgnorePersistence
-    public Bitmap getLogoSite() {
-        return logoSite;
-    }
-
-    public Site setLogoSite(Bitmap logoSite) {
-        this.logoSite = logoSite;
         return this;
     }
 
@@ -158,6 +147,16 @@ public class Site implements Parcelable {
         return this;
     }
 
+    @IgnorePersistence
+    public Bitmap getLogoSite() {
+        return logoSite;
+    }
+
+    public Site setLogoSite(Bitmap logoSite) {
+        this.logoSite = logoSite;
+        return this;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -165,20 +164,20 @@ public class Site implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
+        if (this.id == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeLong(id);
+            dest.writeLong(this.id);
         }
-        dest.writeParcelable(this.usuario, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
-        dest.writeParcelable((Parcelable) this.logoSite, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
         dest.writeString(this.idUsuario);
         dest.writeString(this.caminhoFoto);
         dest.writeString(this.nomeSite);
         dest.writeString(this.urlSite);
         dest.writeString(this.loginSite);
         dest.writeString(this.senhaSite);
+        dest.writeParcelable(this.usuario, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+        dest.writeParcelable(this.logoSite, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
     }
 
     public interface Metadata {
@@ -193,6 +192,7 @@ public class Site implements Parcelable {
         String FIELD_URL = "urlSite";
         String FIELD_LOGIN = "loginSite";
         String FIELD_SENHA = "senhaSite";
+
         String ORDER_BY_ASC = "ASC";
         String ORDER_BY_DESC = "DESC";
 

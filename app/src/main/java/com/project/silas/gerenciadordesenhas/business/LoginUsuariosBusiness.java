@@ -40,6 +40,7 @@ public class LoginUsuariosBusiness {
     public OperationResult<Usuario> efetuarLogin(Usuario usuarioLogar){
         OperationResult<Usuario> retornoLogin = new OperationResult<>();
         Cursor cursor = null;
+        Usuario usuarioBanco = null;
 
         try{
             this.banco.beginTransaction();
@@ -47,10 +48,10 @@ public class LoginUsuariosBusiness {
             if (usuarioLogar.getEmailUsuario().equals("")) throw new LoginException("Digite um e-mail");
             if (usuarioLogar.getSenhaUsuario().equals("")) throw new LoginException("Digite uma senha");
 
-            Usuario usuarioBanco = loginUsingDatabase(usuarioLogar);
+            usuarioBanco = loginUsingDatabase(usuarioLogar);
 
             //Se existe internet, vou fazer o login utilizando backend para atualizar os dados contidos no dispositvo
-            if(this.backendIntegrator.isInternetAvailable()) {
+            if(usuarioBanco != null && this.backendIntegrator.isInternetAvailable()) {
                 usuarioBanco = this.loginAPI(usuarioBanco);
             }
 
@@ -60,7 +61,11 @@ public class LoginUsuariosBusiness {
         } catch (Throwable error){
             error.printStackTrace();
             Log.i("loginBusiness", "Erro ao logar. Mensagem: " + error.getMessage());
-            retornoLogin.withError(error);
+            if (usuarioBanco != null){
+                retornoLogin.withResult(usuarioBanco);
+            } else {
+                retornoLogin.withError(error);
+            }
         } finally {
             if (cursor != null) cursor.close();
             this.banco.endTransaction();

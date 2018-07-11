@@ -6,17 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
-import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
-import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.InicializacaoManager;
-import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
-import com.project.silas.gerenciadordesenhas.ui.user.CadastroUsuariosActivity;
 import com.project.silas.gerenciadordesenhas.ui.user.LoginUsuariosActivity;
 
 public class SplashScreenActivity extends AppCompatActivity{

@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +35,8 @@ import com.project.silas.gerenciadordesenhas.managers.CadastroSiteManager;
 import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
 import com.project.silas.gerenciadordesenhas.ui.site.CadastroSiteActivity;
 import com.project.silas.gerenciadordesenhas.ui.utils.RecyclerItemClickListener;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,7 +128,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TelaPrincipalActivity.this, CadastroSiteActivity.class);
-                if (adaptador.getSiteSelecionado() != null) intent.putExtra(CadastroSiteActivity.CHAVE_REGISTRO_SITE, adaptador.getSiteSelecionado());
+                if (adaptador.getSiteSelecionado() != null) intent.putExtra(CadastroSiteActivity.CHAVE_REGISTRO_SITE, (Parcelable) adaptador.getSiteSelecionado());
                 startActivityForResult(intent, CODIGO_RETORNO_REGISTRO);
             }
         });
@@ -332,7 +335,7 @@ public class TelaPrincipalActivity extends AppCompatActivity {
         this.gridLayoutManager = new GridLayoutManager(this, 1);
         rvTelaPrincpal.setLayoutManager(this.gridLayoutManager);
 
-        this.adaptador = new TelaPrincipalAdapter(this, this.telaPrincipalManager, this.usuarioLogado, this.ultimaPesquisa, new OperationListener<Void>() {
+        this.adaptador = new TelaPrincipalAdapter(this, this.telaPrincipalManager, this.ultimaPesquisa, new OperationListener<Void>() {
             @Override
             public void onSuccess(Void result) {
                 rvTelaPrincpal.setAdapter(adaptador);

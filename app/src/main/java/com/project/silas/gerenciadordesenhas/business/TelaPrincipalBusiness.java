@@ -12,6 +12,8 @@ import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
 import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
 
+import java.io.File;
+
 public class TelaPrincipalBusiness {
 
     private Context contexto;
@@ -21,6 +23,7 @@ public class TelaPrincipalBusiness {
     private BackendIntegrator backendIntegrator;
 
     private Usuario usuarioLogado;
+    private FileBusiness fileBusiness;
 
     public TelaPrincipalBusiness (Context context){
         this.contexto = context;
@@ -28,6 +31,7 @@ public class TelaPrincipalBusiness {
         this.siteDao = new SiteDao(this.bancoDados);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
         this.backendIntegrator = new BackendIntegrator(this.contexto);
+        this.fileBusiness = new FileBusiness(this.contexto);
     }
 
     public OperationResult<Cursor> buscarLogins(String queryPesquisa) {
@@ -53,6 +57,38 @@ public class TelaPrincipalBusiness {
             retornoSites.withError(error);
         }
         return retornoSites;
+    }
+
+    public OperationResult<Bitmap> buscaLogoSite(Site siteLogo){
+        OperationResult<Bitmap> retornoLogo = new OperationResult<>();
+        Cursor cursor = null;
+
+        try{
+            this.bancoDados.beginTransaction();
+
+            if (this.backendIntegrator.isInternetAvailable()) {
+                Bitmap logoRecebida = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "logo/{" + siteLogo.getNomeSite() + "}", siteLogo);
+                Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (logoRecebida == null ? "Não" : "Sim"));
+
+                if (logoRecebida != null) {
+                    Log.i("siteBusiness", "Logo: " + logoRecebida);
+                    retornoLogo.withResult(this.fileBusiness.salvarLogoSite(logoRecebida, siteLogo));
+                }
+            } else {
+                retornoLogo.withResult(this.fileBusiness.buscaLogoDisco(siteLogo));
+            }
+
+            this.bancoDados.setTransactionSuccessful();
+
+        } catch (Throwable error){
+            error.printStackTrace();
+            retornoLogo.withError(error);
+            Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            this.bancoDados.endTransaction();
+        }
+        return retornoLogo;
     }
 
     public interface Query {

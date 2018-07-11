@@ -98,7 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="flagNavigateNext"
-                        android:inputType="text"
+                        android:inputType="textWebEmailAddress"
                         android:maxLines="1" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -157,7 +157,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/gl_cadastro_site11"
-                    app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site7" />
+                    app:layout_constraintTop_toBottomOf="@+id/gl_cadastro_site6" />
 
                 <Button
                     android:id="@+id/bt_cancelar_cadastro_site"
@@ -184,42 +184,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="250dp" />
+                    app:layout_constraintGuide_begin="300dp" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/gl_cadastro_site2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="300dp" />
+                    app:layout_constraintGuide_begin="350dp" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/gl_cadastro_site3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="350dp" />
+                    app:layout_constraintGuide_begin="400dp" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/gl_cadastro_site4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="400dp" />
+                    app:layout_constraintGuide_begin="450dp" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/gl_cadastro_site5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="450dp" />
+                    app:layout_constraintGuide_begin="500dp" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/gl_cadastro_site6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="500dp" />
+                    app:layout_constraintGuide_begin="550dp" />
 
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>

@@ -10,14 +10,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
 
+import com.project.silas.gerenciadordesenhas.R;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.core.abstracts.BusinessAbstract;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.InvalidParameterException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ansilva on 01/12/2016.
@@ -25,7 +36,6 @@ import java.util.Date;
 public class FileBusiness extends BusinessAbstract {
 
     public static final String ROOT = Environment.getExternalStorageDirectory() + "/Gerenciador de Senhas";
-    public static String caminhoUltimaFoto;
 
     private Context contexto;
     private Usuario usuarioLogado;
@@ -39,10 +49,8 @@ public class FileBusiness extends BusinessAbstract {
         this.banco = InicializacaoBusiness.getDatabase();
     }
 
-    public OperationResult<Bitmap> salvarLogoSite(Drawable logoSite, Site site) {
-        OperationResult<Bitmap> retornoFotoInserir = new OperationResult<>();
+    public Bitmap salvarLogoSite(Bitmap logoSite, Site site) {
 
-        Date data = new Date();
         //Criação do diretório com o root, usuario
         File direct = new File(ROOT + "/" + SessionSingletonBusiness.getUsuario().getId());
 
@@ -71,50 +79,34 @@ public class FileBusiness extends BusinessAbstract {
         Log.i("fotoBusiness", "Caminho da foto completo no Business: " + file.getAbsolutePath());
 
         try {
-            this.banco.beginTransaction();
 
             FileOutputStream out = new FileOutputStream(file);
-            Bitmap fotoLogoSite = ((BitmapDrawable) logoSite).getBitmap();
-            fotoLogoSite.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            logoSite.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
 
-            retornoFotoInserir.withResult(fotoLogoSite);
-            this.banco.setTransactionSuccessful();
         } catch (Throwable e) {
             e.printStackTrace();
             Log.i("fotoBusiness", "Erro ao salvar foto. Mensagem: " + e.getMessage());
-            retornoFotoInserir.withError(e);
-        } finally {
-            this.banco.endTransaction();
         }
-        return retornoFotoInserir;
+        return logoSite;
     }
 
-    public OperationResult<Bitmap> buscaLogoSiteDisco (Site siteFotoBuscar){
-        OperationResult<Bitmap> retornoFotoBuscar = new OperationResult<>();
-        File caminho = null;
+    public Bitmap buscaLogoDisco(Site siteFotoBuscar){
         Bitmap fotoLogo = null;
 
         try {
-            this.banco.beginTransaction();
-
-            caminho = new File(siteFotoBuscar.getCaminhoFoto());
+            File caminho = new File(siteFotoBuscar.getCaminhoFoto());
 
             if (caminho.exists()){
                 fotoLogo = BitmapFactory.decodeFile(caminho.getAbsolutePath());
             }
 
-            retornoFotoBuscar.withResult(fotoLogo);
-            this.banco.setTransactionSuccessful();
         } catch (Throwable error){
             error.printStackTrace();
-            retornoFotoBuscar.withError(error);
             Log.i("fotoBusiness", "Nenhuma foto encontrada no banco. Mensagem: " + error.getMessage());
-        } finally {
-            this.banco.endTransaction();
         }
-        return retornoFotoBuscar;
+        return fotoLogo;
     }
 
     public OperationResult<Site> deletarFotoLogoSite(Site siteFotoDeletar){
@@ -132,5 +124,48 @@ public class FileBusiness extends BusinessAbstract {
             retornoFotoDeletada.withError(error);
         }
         return retornoFotoDeletada;
+    }
+
+    /**
+     * Tenta descobrir e retorna o mimetype do arquivo recebido baseado na sua extensão.
+     * @param arquivo
+     * @return
+     */
+    public String getMimeType(File arquivo) {
+        Map<String, String> lista = new HashMap<>();
+        lista.put("jpg", "image/jpeg");
+        lista.put("jpeg", "image/jpeg");
+        lista.put("gif", "image/gif");
+        lista.put("png", "image/png");
+        lista.put("zip", "application/zip");
+        lista.put("pdf", "application/pdf");
+        String nome = arquivo.getName();
+        String[] parts = arquivo.getName().split("\\.");
+        if(!lista.containsKey(parts[parts.length-1])) {
+            throw new InvalidParameterException("Parametro invalido");
+        }
+        return lista.get(parts[parts.length - 1]);
+    }
+
+    /**
+     * Retorna o MD5 do File recebido via parâmetro
+     * @param file
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    public String getMd5Arquivo(File file) throws NoSuchAlgorithmException, IOException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        int byteArraySize = 2048;
+        InputStream is = new FileInputStream(file);
+        md.reset();
+        byte[] bytes = new byte[byteArraySize];
+        int numBytes;
+        while ((numBytes = is.read(bytes)) != -1) {
+            md.update(bytes, 0, numBytes);
+        }
+        byte[] digest = md.digest();
+        String result = new String(Hex.encodeHex(digest));
+        return result;
     }
 }

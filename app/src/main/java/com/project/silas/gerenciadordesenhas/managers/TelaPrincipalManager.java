@@ -10,7 +10,6 @@ import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.core.abstracts.ManagerAbstract;
 import com.project.silas.gerenciadordesenhas.entity.Site;
-import com.project.silas.gerenciadordesenhas.entity.Usuario;
 
 public class TelaPrincipalManager extends ManagerAbstract {
 
@@ -19,13 +18,11 @@ public class TelaPrincipalManager extends ManagerAbstract {
 
     private Context contexto;
     private TelaPrincipalBusiness telaPrincipalBusiness;
-    private FileBusiness fileBusiness;
 
     public TelaPrincipalManager(Context context) {
         super(context);
         this.contexto = context;
         this.telaPrincipalBusiness = new TelaPrincipalBusiness(this.contexto);
-        this.fileBusiness = new FileBusiness(this.contexto);
     }
 
     public void buscarLogins(final String queryPesquisa, OperationListener<Cursor> operationListener) {
@@ -48,7 +45,7 @@ public class TelaPrincipalManager extends ManagerAbstract {
         runViaSyncLoader(LOADER_BUSCA_LOGO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
-                OperationResult<Bitmap> retornoLogo = fileBusiness.buscaLogoSiteDisco(site);
+                OperationResult<Bitmap> retornoLogo = telaPrincipalBusiness.buscaLogoSite(site);
 
                 if (retornoLogo.getError() != null){
                     result.withError(retornoLogo.getError());

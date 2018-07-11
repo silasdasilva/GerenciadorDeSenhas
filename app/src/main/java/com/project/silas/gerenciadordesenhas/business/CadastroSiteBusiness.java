@@ -54,6 +54,7 @@ public class CadastroSiteBusiness {
 
             Log.i("siteBusiness", "Confere dados:\n"
                     + "\nId Usuário: " + this.usuarioLogado.getId()
+                    + "\nNome: " + siteInsercao.getNomeSite()
                     + "\nUrl: " + siteInsercao.getUrlSite()
                     + "\nLogin: " + siteInsercao.getLoginSite());
 
@@ -79,8 +80,6 @@ public class CadastroSiteBusiness {
             if (cursor.getCount() <= 0) throw new CadastroException("Site não pôde ser cadastrado");
 
             Log.i("siteBusiness", "Número de sites cadastrados: " + cursor.getCount());
-
-            buscaLogoSite(siteInsercao);
 
             retornoInsercao.withResult(siteInsercao);
             this.bancoDeDados.setTransactionSuccessful();
@@ -113,21 +112,20 @@ public class CadastroSiteBusiness {
                             , String.valueOf(siteAtualizacao.getId())}); // AND*/
 
             //                                                                              WHERE                                       AND
-            cursor = this.siteDao.rawQuery(Query.CONFERE_ATUALIZACAO, new String[]{siteAtualizacao.getIdUsuario(), String.valueOf(siteAtualizacao.getId())});
+            cursor = this.siteDao.rawQuery(Query.CONFERE_ATUALIZACAO, new String[]{String.valueOf(this.usuarioLogado.getId()), String.valueOf(siteAtualizacao.getId())});
 
             cursor.moveToFirst();
             if (cursor.getCount() <= 0) throw new CadastroException("Erro ao atualizar site");
 
             Site siteAtualizado = new Site(cursor);
-            if (siteAtualizacao.getUrlSite().equals(siteAtualizado.getUrlSite())
-                    && siteAtualizacao.getLoginSite().equals(siteAtualizado.getLoginSite())
-                    && siteAtualizacao.getSenhaSite().equals(siteAtualizado.getSenhaSite())){
+            if (!siteAtualizacao.getNomeSite().equals(siteAtualizado.getNomeSite())
+                    || !siteAtualizacao.getUrlSite().equals(siteAtualizado.getUrlSite())
+                    || !siteAtualizacao.getLoginSite().equals(siteAtualizado.getLoginSite())
+                    || !siteAtualizacao.getSenhaSite().equals(siteAtualizado.getSenhaSite())){
                 throw new CadastroException("Atualização deu errado");
             }
 
             Log.i("siteBusiness", "Número de sites atualizados: " + cursor.getCount());
-
-            buscaLogoSite(siteAtualizacao);
 
             retornoAtualizacao.withResult(siteAtualizado);
             this.bancoDeDados.setTransactionSuccessful();
@@ -174,29 +172,17 @@ public class CadastroSiteBusiness {
         return retornoExclusao;
     }
 
-    private void buscaLogoSite(Site siteLogo){
-        Cursor cursor = null;
+    public OperationResult<Bitmap> buscaLogoDisco(Site site) {
+        OperationResult<Bitmap> retornoLogo = new OperationResult<>();
 
-        try{
-            this.bancoDeDados.beginTransaction();
-
-            Drawable response = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "logo/{" + siteLogo.getNomeSite() + "}");
-            Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (response == null ? "Não" : "Sim"));
-
-            if (response != null) {
-                Log.i("siteBusiness", "Logo: " + response.getCurrent());
-                this.fileBusiness.salvarLogoSite(response, siteLogo);
-            }
-
-            this.bancoDeDados.setTransactionSuccessful();
-
+        try {
+            retornoLogo.withResult(this.fileBusiness.buscaLogoDisco(site));
         } catch (Throwable error){
             error.printStackTrace();
-            Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
-        } finally {
-            if (cursor != null) cursor.close();
-            this.bancoDeDados.endTransaction();
+            retornoLogo.withError(error);
+            Log.i("siteBusiness", "Erro ao buscar foto. Mensagem: " + error.getMessage());
         }
+        return retornoLogo;
     }
 
     public interface Query {

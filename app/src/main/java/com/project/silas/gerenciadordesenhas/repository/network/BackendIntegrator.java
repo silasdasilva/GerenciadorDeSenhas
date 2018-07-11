@@ -1,25 +1,33 @@
 package com.project.silas.gerenciadordesenhas.repository.network;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
 
 import com.project.silas.gerenciadordesenhas.BuildConfig;
+import com.project.silas.gerenciadordesenhas.business.CadastroSiteBusiness;
 import com.project.silas.gerenciadordesenhas.business.FileBusiness;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.business.UsuarioBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
+import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToConnectServerException;
 import com.project.silas.gerenciadordesenhas.exceptions.FailedToWriteInternalDataException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,9 +131,8 @@ public class BackendIntegrator {
         }
     }
 
-    public Drawable syncRequestLogo(int method, String urlEndpoint, Site siteLogo) throws FailedToConnectServerException {
-        Drawable logoSite = null;
-        InputStream inputStream = null;
+    public Bitmap syncRequestLogo(int method, String urlEndpoint, Site siteLogo) throws FailedToConnectServerException {
+        Bitmap logoSite = null;
 
         if(!this.isInternetAvailable()) throw new FailedToConnectServerException("Erro ao enviar/receber dados api");
 
@@ -138,34 +145,32 @@ public class BackendIntegrator {
 
         try {
             if (method == METHOD_GET) {
-
                 requestBuilder.header("authorization", this.usuarioLogado.getTokenUsuario());
-                /**
-                 * --header 'authorization: c6da7b6a-0848-45f2-b646-a8c7615e2d65'
-                 * */
             }
             Request request = requestBuilder.build();
             response = this.client.newCall(request).execute();
 
             bloqueioDeEspera.acquire();
 
-            if(response.body() != null) {
-                logoSite = response.body().string()/**TERMINAR*/
-                (new FileBusiness(this.contexto)).salvarLogoSite(response, siteLogo);
-            }
 
+            /**
+             * VERIFICAR PARA TERMINAR
+             * */
+
+            String strResponse = response.body().string();
             Log.e("sRequest", urlEndpoint);
-            Log.e("sResponse", response.toString());
+            Log.e("sResponse", strResponse);
 
-
+            byte[] bytesResponse = Base64.decode(strResponse, Base64.DEFAULT);
+            logoSite = BitmapFactory.decodeByteArray(bytesResponse, 0, bytesResponse.length);
 
         } catch (Exception e) {
-
+            e.printStackTrace();
             if(response != null) {
                 Log.e("retorno", "Retorno da API: " + response.body().toString());
+                return null;
             }
             Log.e("retorno", "Exception: " + e.getMessage());
-            e.printStackTrace();
             throw new FailedToConnectServerException(e.getMessage());
         }
         return logoSite;

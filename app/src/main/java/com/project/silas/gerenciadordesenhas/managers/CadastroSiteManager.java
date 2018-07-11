@@ -1,8 +1,10 @@
 package com.project.silas.gerenciadordesenhas.managers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.project.silas.gerenciadordesenhas.business.CadastroSiteBusiness;
+import com.project.silas.gerenciadordesenhas.business.FileBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.core.abstracts.ManagerAbstract;
@@ -13,6 +15,8 @@ public class CadastroSiteManager extends ManagerAbstract{
     private static final int LOADER_INSERCAO_SITE = 200;
     private static final int LOADER_ATUALIZACAO_SITE = 300;
     private static final int LOADER_EXCLUSAO_SITE = 400;
+    private static final int LOADER_BUSCA_LOGO_SITE = 500;
+
 
     private Context contexto;
     private CadastroSiteBusiness cadastroSiteBusiness;
@@ -39,7 +43,7 @@ public class CadastroSiteManager extends ManagerAbstract{
     }
 
     public void atualizaSite(final Site siteModificacao, OperationListener<Site> operationListener) {
-        runViaSyncLoader(LOADER_INSERCAO_SITE, new OperationListener<OperationResult>(){
+        runViaSyncLoader(LOADER_ATUALIZACAO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
                 OperationResult<Site> retornoAtualizacao = cadastroSiteBusiness.atualizaSite(siteModificacao);
@@ -54,7 +58,7 @@ public class CadastroSiteManager extends ManagerAbstract{
     }
 
     public void excluiSite(final Site siteModificacao, OperationListener<Site> operationListener) {
-        runViaSyncLoader(LOADER_INSERCAO_SITE, new OperationListener<OperationResult>(){
+        runViaSyncLoader(LOADER_EXCLUSAO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
                 OperationResult<Site> retornoExclusao = cadastroSiteBusiness.excluiSite(siteModificacao);
@@ -66,5 +70,20 @@ public class CadastroSiteManager extends ManagerAbstract{
                 result.withResult(retornoExclusao.getResult());
             }
         }, operationListener);
+    }
+
+    public void buscarLogoSite(final Site site, OperationListener<Bitmap> listenerLogo) {
+        runViaSyncLoader(LOADER_BUSCA_LOGO_SITE, new OperationListener<OperationResult>(){
+            @Override
+            public void onSuccess(OperationResult result) {
+                OperationResult<Bitmap> retornoLogo = cadastroSiteBusiness.buscaLogoDisco(site);
+
+                if (retornoLogo.getError() != null){
+                    result.withError(retornoLogo.getError());
+                    return;
+                }
+                result.withResult(retornoLogo.getResult());
+            }
+        }, listenerLogo);
     }
 }

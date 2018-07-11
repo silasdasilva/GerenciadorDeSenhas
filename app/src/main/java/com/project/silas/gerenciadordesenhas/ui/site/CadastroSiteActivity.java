@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
     private Usuario usuarioLogado;
     private Site siteModificacao;
 
-    public static final String CHAVE_REGISTRO_SITE = "atualizacaoSite";
+    public static final String CHAVE_REGISTRO_SITE = "registroSite";
 
     private CadastroSiteManager cadastroSiteManager;
     private AlertDialog.Builder alerta;
@@ -75,7 +76,6 @@ public class CadastroSiteActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             this.siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             preencheProperties();
         }
 
@@ -83,10 +83,9 @@ public class CadastroSiteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 exibirProgressDialog();
-                if (totalAlteracoes() == 3) {
-                    if (siteModificacao != null) {
-                        siteModificacao.setIdUsuario(String.valueOf(SessionSingletonBusiness.getUsuario().getId()))
-                                .setNomeSite(tietNomeCadastroSite.getText().toString())
+                if (siteModificacao != null) {
+                    if (totalAlteracoes() > 0) {
+                        siteModificacao.setNomeSite(tietNomeCadastroSite.getText().toString())
                                 .setUrlSite(tietUrlCadastroSite.getText().toString())
                                 .setLoginSite(tietLoginCadastroSite.getText().toString())
                                 .setSenhaSite(tietSenhaCadastroSite.getText().toString());
@@ -105,12 +104,16 @@ public class CadastroSiteActivity extends AppCompatActivity {
                             public void onError(Throwable error) {
                                 super.onError(error);
                                 error.printStackTrace();
-                                progressDialog.dismiss();
+                                siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
                                 Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
-
+                    Toast.makeText(CadastroSiteActivity.this, "Modifique os dados para salvar!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    return;
+                }
+                if (totalAlteracoes() == 4) {
                     cadastroSiteManager.insereSite(siteModificacao, new OperationListener<Site>() {
                         @Override
                         public void onSuccess(Site result) {
@@ -125,12 +128,15 @@ public class CadastroSiteActivity extends AppCompatActivity {
                         public void onError(Throwable error) {
                             super.onError(error);
                             error.printStackTrace();
-                            progressDialog.dismiss();
+                            siteModificacao = new Site();
                             Toast.makeText(CadastroSiteActivity.this, "Erro ao inserir site", Toast.LENGTH_SHORT).show();
                         }
                     });
-
+                    progressDialog.dismiss();
+                    return;
                 }
+                if (totalAlteracoes() == 0) Toast.makeText(CadastroSiteActivity.this, "Preencha os campos para continuar!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         });
 
@@ -143,14 +149,14 @@ public class CadastroSiteActivity extends AppCompatActivity {
     }
 
     private void preencheProperties() {
-        if (siteModificacao != null) {
+        if (this.siteModificacao != null) {
             tietNomeCadastroSite.setText(this.siteModificacao.getNomeSite());
             tietUrlCadastroSite.setText(this.siteModificacao.getUrlSite());
             tietLoginCadastroSite.setText(this.siteModificacao.getLoginSite());
             tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
 
-            if (siteModificacao.getCaminhoFoto() != null && !siteModificacao.getCaminhoFoto().equals("null") && !siteModificacao.getCaminhoFoto().equals("")){
-                new TelaPrincipalManager(this).buscarLogoSite(siteModificacao, new OperationListener<Bitmap>(){
+            if (this.siteModificacao.getCaminhoFoto() != null && !this.siteModificacao.getCaminhoFoto().equals("null") && !this.siteModificacao.getCaminhoFoto().equals("")){
+                this.cadastroSiteManager.buscarLogoSite(this.siteModificacao, new OperationListener<Bitmap>(){
                     @Override
                     public void onSuccess(Bitmap result) {
                         if (result != null){
@@ -187,29 +193,32 @@ public class CadastroSiteActivity extends AppCompatActivity {
     public void onBackPressed() {
         try {
 
-            this.alerta = new AlertDialog.Builder(this);
-            this.alerta.setTitle(getString(R.string.st_alerta_cadastro_site))
-                    .setMessage(getString(R.string.st_mensagem_sair_cadastro_site))
-                    .setPositiveButton(getString(R.string.st_sim_cadastro_site), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
-                            setResult(RESULT_CANCELED, intent);
-                            finish();
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.st_nao_cadastro_site), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .create()
-                    .show();
+            if (totalAlteracoes() > 0) {
+                this.alerta = new AlertDialog.Builder(this);
+                this.alerta.setTitle(getString(R.string.st_alerta_cadastro_site))
+                        .setMessage(getString(R.string.st_mensagem_sair_cadastro_site))
+                        .setPositiveButton(getString(R.string.st_sim_cadastro_site), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
+                                setResult(RESULT_CANCELED, intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.st_nao_cadastro_site), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create()
+                        .show();
+            }
 
         } catch (Throwable e) {
             e.printStackTrace();
+        } finally {
             super.onBackPressed();
         }
     }
@@ -217,6 +226,10 @@ public class CadastroSiteActivity extends AppCompatActivity {
     private int totalAlteracoes() {
         int alteracoes = 0;
         if (this.siteModificacao != null) {
+            if (!tietNomeCadastroSite.getText().toString().equals("") && !tietNomeCadastroSite.getText().toString().equals("null")
+                    && !tietNomeCadastroSite.getText().toString().equals(this.siteModificacao.getNomeSite())) {
+                alteracoes++;
+            }
             if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")
                     && !tietUrlCadastroSite.getText().toString().equals(this.siteModificacao.getUrlSite())) {
                 alteracoes++;
@@ -230,10 +243,12 @@ public class CadastroSiteActivity extends AppCompatActivity {
                 alteracoes++;
             }
         } else {
+            if (!tietNomeCadastroSite.getText().toString().equals("") && !tietNomeCadastroSite.getText().toString().equals("null")) alteracoes++;
             if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")) alteracoes++;
             if (!tietLoginCadastroSite.getText().toString().equals("") && !tietLoginCadastroSite.getText().toString().equals("null")) alteracoes++;
             if (!tietSenhaCadastroSite.getText().toString().equals("") && !tietSenhaCadastroSite.getText().toString().equals("null")) alteracoes++;
-            this.siteModificacao = new Site().setNomeSite(tietNomeCadastroSite.getText().toString())
+            this.siteModificacao = new Site()
+                    .setNomeSite(tietNomeCadastroSite.getText().toString())
                     .setUrlSite(tietUrlCadastroSite.getText().toString())
                     .setLoginSite(tietLoginCadastroSite.getText().toString())
                     .setSenhaSite(tietSenhaCadastroSite.getText().toString());
