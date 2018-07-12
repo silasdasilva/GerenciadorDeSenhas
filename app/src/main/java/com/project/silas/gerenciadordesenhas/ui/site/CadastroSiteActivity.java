@@ -161,6 +161,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
                     public void onSuccess(Bitmap result) {
                         if (result != null){
                             ivLogoSiteCadastroSite.setImageBitmap(result);
+                            return;
                         }
                     }
 

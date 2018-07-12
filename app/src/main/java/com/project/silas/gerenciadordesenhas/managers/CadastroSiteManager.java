@@ -1,5 +1,6 @@
 package com.project.silas.gerenciadordesenhas.managers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -10,18 +11,19 @@ import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.core.abstracts.ManagerAbstract;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 
+import java.util.Random;
+
 public class CadastroSiteManager extends ManagerAbstract{
 
     private static final int LOADER_INSERCAO_SITE = 200;
     private static final int LOADER_ATUALIZACAO_SITE = 300;
     private static final int LOADER_EXCLUSAO_SITE = 400;
-    private static final int LOADER_BUSCA_LOGO_SITE = 500;
+    private static int LOADER_BUSCA_LOGO_SITE = 500;
 
-
-    private Context contexto;
+    private Activity contexto;
     private CadastroSiteBusiness cadastroSiteBusiness;
 
-    public CadastroSiteManager(Context context) {
+    public CadastroSiteManager(Activity context) {
         super(context);
         this.contexto = context;
         this.cadastroSiteBusiness = new CadastroSiteBusiness(this.contexto);
@@ -73,6 +75,9 @@ public class CadastroSiteManager extends ManagerAbstract{
     }
 
     public void buscarLogoSite(final Site site, OperationListener<Bitmap> listenerLogo) {
+        if (this.contexto.getLoaderManager().getLoader(LOADER_BUSCA_LOGO_SITE) != null){
+            LOADER_BUSCA_LOGO_SITE = new Random().nextInt(1000);
+        }
         runViaSyncLoader(LOADER_BUSCA_LOGO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {

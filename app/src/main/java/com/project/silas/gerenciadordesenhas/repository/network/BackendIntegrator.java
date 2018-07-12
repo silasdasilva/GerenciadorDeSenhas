@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Base64InputStream;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -48,6 +49,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSource;
 
 public class BackendIntegrator {
     protected Context contexto;
@@ -145,17 +147,13 @@ public class BackendIntegrator {
 
         try {
             if (method == METHOD_GET) {
+                Log.i("sToken", "Token: " + this.usuarioLogado.getTokenUsuario());
                 requestBuilder.header("authorization", this.usuarioLogado.getTokenUsuario());
             }
             Request request = requestBuilder.build();
             response = this.client.newCall(request).execute();
 
             bloqueioDeEspera.acquire();
-
-
-            /**
-             * VERIFICAR PARA TERMINAR
-             * */
 
             String strResponse = response.body().string();
             Log.e("sRequest", urlEndpoint);

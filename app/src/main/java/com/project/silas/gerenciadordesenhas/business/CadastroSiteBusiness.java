@@ -66,7 +66,7 @@ public class CadastroSiteBusiness {
             cursor.moveToFirst();
             if (cursor != null && cursor.getCount() > 0) throw new CadastroException("Já existe esse login para este usuário!");
 
-            long idSite = this.siteDao.insert(siteInsercao);
+            long idSite = this.siteDao.insert(siteInsercao.setIdUsuario(String.valueOf(this.usuarioLogado.getId())));
 
             /*this.bancoDeDados.execSQL(Query.INSERIR_SITE,
                     new String[]{String.valueOf(this.usuarioLogado.getId())

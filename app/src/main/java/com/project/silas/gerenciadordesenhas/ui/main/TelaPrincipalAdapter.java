@@ -149,7 +149,9 @@ public class TelaPrincipalAdapter extends RecyclerView.Adapter<TelaPrincipalAdap
                     if (result != null){
                         site.setLogoSite(result);
                         ivItemLogoTelaPrincipal.setImageBitmap(result);
+                        return;
                     }
+                    ivItemLogoTelaPrincipal.setImageDrawable(TelaPrincipalAdapter.this.contexto.getResources().getDrawable(R.drawable.logo_default));
                 }
 
                 @Override
