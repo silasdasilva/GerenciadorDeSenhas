@@ -13,6 +13,7 @@ import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrato
 
 import org.json.JSONObject;
 
+import java.security.KeyStore;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,6 +87,8 @@ public class CadastroUsuariosBusiness {
             long idUsuario = this.usuarioDao.insert(usuarioCadastro);
 
             cursor = this.usuarioDao.rawQuery(Query.CONFERE_EXISTENCIA_ID, new String[]{String.valueOf(idUsuario)});
+
+            /**GERAR CHAVE*/
 
             cursor.moveToFirst();
             if (cursor.getInt(cursor.getColumnIndex("verificacaoId")) <= 0) throw new CadastroException("Usuário não pôde ser cadastrado");

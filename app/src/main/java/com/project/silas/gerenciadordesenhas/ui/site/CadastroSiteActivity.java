@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Parcelable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,19 +13,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.silas.gerenciadordesenhas.R;
-import com.project.silas.gerenciadordesenhas.business.FileBusiness;
 import com.project.silas.gerenciadordesenhas.business.SessionSingletonBusiness;
 import com.project.silas.gerenciadordesenhas.core.OperationListener;
-import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.core.helpers.CustomDialog;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.managers.CadastroSiteManager;
-import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
+import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
 import com.project.silas.gerenciadordesenhas.ui.main.TelaPrincipalActivity;
 
 import butterknife.BindView;
@@ -74,6 +70,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
         this.cadastroSiteManager = new CadastroSiteManager(this);
         this.usuarioLogado = SessionSingletonBusiness.getUsuario();
 
+        this.siteModificacao = new Site();
         if (getIntent().getExtras() != null) {
             this.siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
             preencheProperties();
@@ -82,61 +79,70 @@ public class CadastroSiteActivity extends AppCompatActivity {
         btSalvarCadastroSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exibirProgressDialog();
-                if (siteModificacao != null) {
-                    if (totalAlteracoes() > 0) {
-                        siteModificacao.setNomeSite(tietNomeCadastroSite.getText().toString())
-                                .setUrlSite(tietUrlCadastroSite.getText().toString())
-                                .setLoginSite(tietLoginCadastroSite.getText().toString())
-                                .setSenhaSite(tietSenhaCadastroSite.getText().toString());
 
-                        cadastroSiteManager.atualizaSite(siteModificacao, new OperationListener<Site>() {
-                            @Override
-                            public void onSuccess(Site result) {
-                                Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
-                                setResult(RESULT_OK, intent);
-                                progressDialog.dismiss();
-                                finish();
-                                Toast.makeText(CadastroSiteActivity.this, "Site atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onError(Throwable error) {
-                                super.onError(error);
-                                error.printStackTrace();
-                                siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
-                                Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                if (siteModificacao.getId() != null) {
+                    if (totalAlteracoes() == 0) {
+                        Toast.makeText(CadastroSiteActivity.this, "Modifique os dados para continuar!", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                    Toast.makeText(CadastroSiteActivity.this, "Modifique os dados para salvar!", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-                    return;
-                }
-                if (totalAlteracoes() == 4) {
-                    cadastroSiteManager.insereSite(siteModificacao, new OperationListener<Site>() {
+                    exibirProgressDialog();
+                    cadastroSiteManager.atualizaSite(siteModificacao.setNomeSite(tietNomeCadastroSite.getText().toString())
+                            .setUrlSite(tietUrlCadastroSite.getText().toString())
+                            .setLoginSite(tietLoginCadastroSite.getText().toString())
+                            .setSenhaSite(tietSenhaCadastroSite.getText().toString()), new OperationListener<Site>() {
                         @Override
                         public void onSuccess(Site result) {
                             Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
                             setResult(RESULT_OK, intent);
                             progressDialog.dismiss();
                             finish();
-                            Toast.makeText(CadastroSiteActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CadastroSiteActivity.this, "Site atualizado com sucesso!", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(Throwable error) {
                             super.onError(error);
                             error.printStackTrace();
-                            siteModificacao = new Site();
-                            Toast.makeText(CadastroSiteActivity.this, "Erro ao inserir site", Toast.LENGTH_SHORT).show();
+                            siteModificacao = getIntent().getParcelableExtra(CHAVE_REGISTRO_SITE);
+                            progressDialog.dismiss();
+                            Toast.makeText(CadastroSiteActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    progressDialog.dismiss();
                     return;
                 }
-                if (totalAlteracoes() == 0) Toast.makeText(CadastroSiteActivity.this, "Preencha os campos para continuar!", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
+                if (totalAlteracoes() < 4) {
+                    Toast.makeText(CadastroSiteActivity.this, "Prencha todos os dados para prosseguir!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!(new BackendIntegrator(CadastroSiteActivity.this).isInternetAvailable())) {
+                    Toast.makeText(CadastroSiteActivity.this, "Para inserir um novo site conecte-se a internet!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                exibirProgressDialog();
+                cadastroSiteManager.insereSite(siteModificacao.setNomeSite(tietNomeCadastroSite.getText().toString())
+                        .setUrlSite(tietUrlCadastroSite.getText().toString())
+                        .setLoginSite(tietLoginCadastroSite.getText().toString())
+                        .setSenhaSite(tietSenhaCadastroSite.getText().toString()), new OperationListener<Site>() {
+                    @Override
+                    public void onSuccess(Site result) {
+                        Intent intent = new Intent(CadastroSiteActivity.this, TelaPrincipalActivity.class);
+                        setResult(RESULT_OK, intent);
+                        progressDialog.dismiss();
+                        finish();
+                        Toast.makeText(CadastroSiteActivity.this, "Site inserido com sucesso!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        super.onError(error);
+                        error.printStackTrace();
+                        siteModificacao = new Site();
+                        progressDialog.dismiss();
+                        Toast.makeText(CadastroSiteActivity.this, "Erro ao inserir site", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -156,7 +162,7 @@ public class CadastroSiteActivity extends AppCompatActivity {
             tietSenhaCadastroSite.setText(this.siteModificacao.getSenhaSite());
 
             if (this.siteModificacao.getCaminhoFoto() != null && !this.siteModificacao.getCaminhoFoto().equals("null") && !this.siteModificacao.getCaminhoFoto().equals("")){
-                this.cadastroSiteManager.buscarLogoSite(this.siteModificacao, new OperationListener<Bitmap>(){
+                this.cadastroSiteManager.buscarLogo(this.siteModificacao, new OperationListener<Bitmap>(){
                     @Override
                     public void onSuccess(Bitmap result) {
                         if (result != null){
@@ -215,11 +221,12 @@ public class CadastroSiteActivity extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .create()
                         .show();
+                return;
             }
+            finish();
 
         } catch (Throwable e) {
             e.printStackTrace();
-        } finally {
             super.onBackPressed();
         }
     }
@@ -248,11 +255,6 @@ public class CadastroSiteActivity extends AppCompatActivity {
             if (!tietUrlCadastroSite.getText().toString().equals("") && !tietUrlCadastroSite.getText().toString().equals("null")) alteracoes++;
             if (!tietLoginCadastroSite.getText().toString().equals("") && !tietLoginCadastroSite.getText().toString().equals("null")) alteracoes++;
             if (!tietSenhaCadastroSite.getText().toString().equals("") && !tietSenhaCadastroSite.getText().toString().equals("null")) alteracoes++;
-            this.siteModificacao = new Site()
-                    .setNomeSite(tietNomeCadastroSite.getText().toString())
-                    .setUrlSite(tietUrlCadastroSite.getText().toString())
-                    .setLoginSite(tietLoginCadastroSite.getText().toString())
-                    .setSenhaSite(tietSenhaCadastroSite.getText().toString());
         }
         return alteracoes;
     }

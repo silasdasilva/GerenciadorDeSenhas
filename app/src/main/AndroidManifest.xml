@@ -50,7 +50,7 @@
 
         </activity>
         <activity
-            android:name=".ui.main.SitesInfoActivity"
+            android:name=".ui.main.TelaPrincipalInfoActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth"
             android:windowSoftInputMode="stateHidden">

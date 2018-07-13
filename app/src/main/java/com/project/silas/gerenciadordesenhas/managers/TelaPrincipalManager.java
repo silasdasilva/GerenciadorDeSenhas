@@ -52,7 +52,7 @@ public class TelaPrincipalManager extends ManagerAbstract {
         runViaSyncLoader(LOADER_BUSCA_LOGO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
-                OperationResult<Bitmap> retornoLogo = telaPrincipalBusiness.buscaLogoSite(site);
+                OperationResult<Bitmap> retornoLogo = (new FileBusiness(contexto)).buscaLogoDisco(site);
 
                 if (retornoLogo.getError() != null){
                     result.withError(retornoLogo.getError());

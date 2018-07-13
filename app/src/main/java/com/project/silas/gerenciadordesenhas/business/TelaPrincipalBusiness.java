@@ -59,38 +59,6 @@ public class TelaPrincipalBusiness {
         return retornoSites;
     }
 
-    public OperationResult<Bitmap> buscaLogoSite(Site siteLogo){
-        OperationResult<Bitmap> retornoLogo = new OperationResult<>();
-        Cursor cursor = null;
-
-        try{
-            this.bancoDados.beginTransaction();
-
-            if (this.backendIntegrator.isInternetAvailable()) {
-                Bitmap logoRecebida = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "logo/{" + siteLogo.getNomeSite() + "}", siteLogo);
-                Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (logoRecebida == null ? "Não" : "Sim"));
-
-                if (logoRecebida != null) {
-                    Log.i("siteBusiness", "Logo: " + logoRecebida);
-                    retornoLogo.withResult(this.fileBusiness.salvarLogoSite(logoRecebida, siteLogo));
-                }
-            } else {
-                retornoLogo.withResult(this.fileBusiness.buscaLogoDisco(siteLogo));
-            }
-
-            this.bancoDados.setTransactionSuccessful();
-
-        } catch (Throwable error){
-            error.printStackTrace();
-            retornoLogo.withError(error);
-            Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
-        } finally {
-            if (cursor != null) cursor.close();
-            this.bancoDados.endTransaction();
-        }
-        return retornoLogo;
-    }
-
     public interface Query {
         String BUSCA_SITES_USUARIO = "SELECT * FROM " + Site.Metadata.TABLE_NAME
                 + " WHERE " + Site.Metadata.TABLE_NAME + "." + Site.Metadata.FIELD_ID_USUARIO + " = ?"

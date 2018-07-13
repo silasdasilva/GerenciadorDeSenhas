@@ -27,15 +27,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +53,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.Buffer;
 import okio.BufferedSource;
+
+import static com.project.silas.gerenciadordesenhas.business.FileBusiness.ROOT;
 
 public class BackendIntegrator {
     protected Context contexto;
@@ -133,7 +140,7 @@ public class BackendIntegrator {
         }
     }
 
-    public Bitmap syncRequestLogo(int method, String urlEndpoint, Site siteLogo) throws FailedToConnectServerException {
+    public Bitmap syncRequestLogo(int method, String urlEndpoint, Site siteLogo) throws FailedToConnectServerException, IOException {
         Bitmap logoSite = null;
 
         if(!this.isInternetAvailable()) throw new FailedToConnectServerException("Erro ao enviar/receber dados api");
@@ -148,19 +155,24 @@ public class BackendIntegrator {
         try {
             if (method == METHOD_GET) {
                 Log.i("sToken", "Token: " + this.usuarioLogado.getTokenUsuario());
-                requestBuilder.header("authorization", this.usuarioLogado.getTokenUsuario());
+                requestBuilder.addHeader("authorization", this.usuarioLogado.getTokenUsuario()).build();
             }
             Request request = requestBuilder.build();
             response = this.client.newCall(request).execute();
 
             bloqueioDeEspera.acquire();
 
-            String strResponse = response.body().string();
-            Log.e("sRequest", urlEndpoint);
-            Log.e("sResponse", strResponse);
+            BufferedSource bufferedSource = response.body().source();
+            Buffer buffer = new Buffer();
+            while (!bufferedSource.exhausted()) {
+                bufferedSource.read(buffer, 8192);
+            }
 
-            byte[] bytesResponse = Base64.decode(strResponse, Base64.DEFAULT);
-            logoSite = BitmapFactory.decodeByteArray(bytesResponse, 0, bytesResponse.length);
+            Log.e("sRequest", urlEndpoint);
+            Log.e("sResponse", buffer.toString());
+            //Log.e("sResponse", strResponde);
+            byte[] bytesDecodificados = buffer.readByteArray();
+            logoSite = BitmapFactory.decodeByteArray(bytesDecodificados, 0, bytesDecodificados.length);
 
         } catch (Exception e) {
             e.printStackTrace();

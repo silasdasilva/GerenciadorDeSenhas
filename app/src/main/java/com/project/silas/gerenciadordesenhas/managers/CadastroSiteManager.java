@@ -74,14 +74,14 @@ public class CadastroSiteManager extends ManagerAbstract{
         }, operationListener);
     }
 
-    public void buscarLogoSite(final Site site, OperationListener<Bitmap> listenerLogo) {
+    public void buscarLogo(final Site site, OperationListener<Bitmap> listenerLogo) {
         if (this.contexto.getLoaderManager().getLoader(LOADER_BUSCA_LOGO_SITE) != null){
             LOADER_BUSCA_LOGO_SITE = new Random().nextInt(1000);
         }
         runViaSyncLoader(LOADER_BUSCA_LOGO_SITE, new OperationListener<OperationResult>(){
             @Override
             public void onSuccess(OperationResult result) {
-                OperationResult<Bitmap> retornoLogo = cadastroSiteBusiness.buscaLogoDisco(site);
+                OperationResult<Bitmap> retornoLogo = (new FileBusiness(contexto)).buscaLogoDisco(site);
 
                 if (retornoLogo.getError() != null){
                     result.withError(retornoLogo.getError());

@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class FileBusiness extends BusinessAbstract {
 
-    public static final String ROOT = Environment.getExternalStorageDirectory() + "/Gerenciador de Senhas";
+    public static final String ROOT = Environment.getExternalStorageDirectory() + "/Gerenciador de Senhas/";
 
     private Context contexto;
     private Usuario usuarioLogado;
@@ -49,7 +49,7 @@ public class FileBusiness extends BusinessAbstract {
         this.banco = InicializacaoBusiness.getDatabase();
     }
 
-    public Bitmap salvarLogoSite(Bitmap logoSite, Site site) {
+    public File salvarLogoSite(Bitmap logoSite, Site site) {
 
         //Criação do diretório com o root, usuario
         File direct = new File(ROOT + "/" + SessionSingletonBusiness.getUsuario().getId());
@@ -58,20 +58,20 @@ public class FileBusiness extends BusinessAbstract {
         if (!direct.exists()) direct.mkdirs();
 
         //Criação do nome da logo do site
-        File file = new File(direct + "/", site.getNomeSite() + ".jpg");
+        File file = new File(direct + "/", site.getNomeSite() + ".png");
 
         //Caso a foto já exista acrescenta-se underline mais um número em sequência
         if (file.exists()) {
             int numeroSeparador = 1;
             String textoSeparador = "_";
             String textoNumeroSeparador = textoSeparador + numeroSeparador;
-            file = new File(direct + "/" + site.getNomeSite() + textoNumeroSeparador + ".jpg");
+            file = new File(direct + "/" + site.getNomeSite() + textoNumeroSeparador + ".png");
 
             if (file.exists()) {
                 while (file.exists()) {
                     numeroSeparador++;
                     textoNumeroSeparador = textoSeparador + numeroSeparador;
-                    file = new File(direct + "/" + site.getNomeSite() + textoNumeroSeparador + ".jpg");
+                    file = new File(direct + "/" + site.getNomeSite() + textoNumeroSeparador + ".png");
                 }
             }
         }
@@ -81,7 +81,7 @@ public class FileBusiness extends BusinessAbstract {
         try {
 
             FileOutputStream out = new FileOutputStream(file);
-            logoSite.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            logoSite.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
 
@@ -89,41 +89,38 @@ public class FileBusiness extends BusinessAbstract {
             e.printStackTrace();
             Log.i("fotoBusiness", "Erro ao salvar foto. Mensagem: " + e.getMessage());
         }
-        return logoSite;
+        return file;
     }
 
-    public Bitmap buscaLogoDisco(Site siteFotoBuscar){
-        Bitmap fotoLogo = null;
+    public OperationResult<Bitmap> buscaLogoDisco(Site siteFotoBuscar){
+        OperationResult<Bitmap> retornoFotoLogo = new OperationResult<>();
 
         try {
             File caminho = new File(siteFotoBuscar.getCaminhoFoto());
 
             if (caminho.exists()){
-                fotoLogo = BitmapFactory.decodeFile(caminho.getAbsolutePath());
+                retornoFotoLogo.withResult(BitmapFactory.decodeFile(caminho.getAbsolutePath()));
             }
 
         } catch (Throwable error){
             error.printStackTrace();
+            retornoFotoLogo.withError(error);
             Log.i("fotoBusiness", "Nenhuma foto encontrada no banco. Mensagem: " + error.getMessage());
         }
-        return fotoLogo;
+        return retornoFotoLogo;
     }
 
-    public OperationResult<Site> deletarFotoLogoSite(Site siteFotoDeletar){
-        OperationResult<Site> retornoFotoDeletada = new OperationResult<>();
+    public void deletarFotoLogoSite(Site siteFotoDeletar){
 
         try {
-
             File caminhoFotoDeletar = new File(siteFotoDeletar.getCaminhoFoto());
-            if (caminhoFotoDeletar.exists()) caminhoFotoDeletar.delete();
-            siteFotoDeletar.setCaminhoFoto(null); //Apaga caminho da foto
+            if (caminhoFotoDeletar.exists()){
+                caminhoFotoDeletar.delete();
+            }
 
-            retornoFotoDeletada.withResult(null);
         } catch (Throwable error){
             error.printStackTrace();
-            retornoFotoDeletada.withError(error);
         }
-        return retornoFotoDeletada;
     }
 
     /**

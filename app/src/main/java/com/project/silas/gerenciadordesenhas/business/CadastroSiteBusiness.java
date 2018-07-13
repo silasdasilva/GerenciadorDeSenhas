@@ -4,25 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.project.silas.gerenciadordesenhas.BuildConfig;
 import com.project.silas.gerenciadordesenhas.core.OperationResult;
 import com.project.silas.gerenciadordesenhas.entity.Site;
 import com.project.silas.gerenciadordesenhas.entity.Usuario;
 import com.project.silas.gerenciadordesenhas.exceptions.CadastroException;
-import com.project.silas.gerenciadordesenhas.exceptions.LoginException;
 import com.project.silas.gerenciadordesenhas.repository.database.dao.SiteDao;
 import com.project.silas.gerenciadordesenhas.repository.network.BackendIntegrator;
 
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CadastroSiteBusiness {
 
@@ -66,6 +57,11 @@ public class CadastroSiteBusiness {
             cursor.moveToFirst();
             if (cursor != null && cursor.getCount() > 0) throw new CadastroException("Já existe esse login para este usuário!");
 
+            File caminhoFoto = buscaLogoAPI(siteInsercao);
+            if (caminhoFoto != null && caminhoFoto.exists()){
+                siteInsercao.setCaminhoFoto(caminhoFoto.getAbsolutePath());
+            }
+
             long idSite = this.siteDao.insert(siteInsercao.setIdUsuario(String.valueOf(this.usuarioLogado.getId())));
 
             /*this.bancoDeDados.execSQL(Query.INSERIR_SITE,
@@ -101,6 +97,12 @@ public class CadastroSiteBusiness {
 
         try {
             this.bancoDeDados.beginTransaction();
+
+            File caminhoFoto = buscaLogoAPI(siteAtualizacao);
+
+            if (caminhoFoto != null && caminhoFoto.exists()){
+                siteAtualizacao.setCaminhoFoto(caminhoFoto.getAbsolutePath());
+            }
 
             this.siteDao.update(siteAtualizacao);
 
@@ -148,16 +150,10 @@ public class CadastroSiteBusiness {
         try {
             this.bancoDeDados.beginTransaction();
 
-            //                                                          WHERE                                       AND
-            //this.bancoDeDados.execSQL(Query.EXCLUIR_SITE, new String[]{siteExclusao.getIdUsuario(), String.valueOf(siteExclusao.getId())});
+            this.fileBusiness.deletarFotoLogoSite(siteExclusao); //Deleta logo do disco
 
-            this.siteDao.delete(siteExclusao);
+            this.siteDao.delete(siteExclusao);//Deleta site do disco
 
-            //                                                                              WHERE                           AND
-            //cursor = this.siteDao.rawQuery(Query.CONFERE_EXCLUSAO, new String[]{siteExclusao.getIdUsuario(), String.valueOf(siteExclusao.getId())});
-
-            //cursor.moveToFirst();
-            //if (cursor.getCount() > 0) throw new CadastroException("Site não foi excluído");
 
             retornoExclusao.withResult(null);
             this.bancoDeDados.setTransactionSuccessful();
@@ -172,17 +168,34 @@ public class CadastroSiteBusiness {
         return retornoExclusao;
     }
 
-    public OperationResult<Bitmap> buscaLogoDisco(Site site) {
-        OperationResult<Bitmap> retornoLogo = new OperationResult<>();
+    public File buscaLogoAPI(Site siteLogo){
+        File caminhoFoto = null;
+        Cursor cursor = null;
 
-        try {
-            retornoLogo.withResult(this.fileBusiness.buscaLogoDisco(site));
+        try{
+            this.bancoDeDados.beginTransaction();
+
+            if (this.backendIntegrator.isInternetAvailable()) {
+                Bitmap logoRecebida = this.backendIntegrator.syncRequestLogo(BackendIntegrator.METHOD_GET, "logo/{" + siteLogo.getNomeSite() + "}", siteLogo);
+                Log.i("siteBusiness", "Logo foi buscada com sucesso? " + (logoRecebida == null ? "Não" : "Sim"));
+
+                if (logoRecebida != null) {
+                    Log.i("siteBusiness", "Logo: " + logoRecebida);
+                    caminhoFoto = this.fileBusiness.salvarLogoSite(logoRecebida, siteLogo);
+                }
+            }
+            //retornoLogo.withResult(this.fileBusiness.buscaLogoDisco(siteLogo));
+
+            this.bancoDeDados.setTransactionSuccessful();
+
         } catch (Throwable error){
             error.printStackTrace();
-            retornoLogo.withError(error);
-            Log.i("siteBusiness", "Erro ao buscar foto. Mensagem: " + error.getMessage());
+            Log.i("siteBusiness", "Erro ao buscar logo. Mensagem: " + error.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            this.bancoDeDados.endTransaction();
         }
-        return retornoLogo;
+        return caminhoFoto;
     }
 
     public interface Query {

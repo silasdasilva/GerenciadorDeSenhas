@@ -12,7 +12,7 @@ import com.project.silas.gerenciadordesenhas.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SitesInfoActivity extends AppCompatActivity {
+public class TelaPrincipalInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_title_into_tela_principal)
     protected TextView tvTitleInfoTelaPrincipal;

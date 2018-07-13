@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
@@ -35,8 +33,6 @@ import com.project.silas.gerenciadordesenhas.managers.CadastroSiteManager;
 import com.project.silas.gerenciadordesenhas.managers.TelaPrincipalManager;
 import com.project.silas.gerenciadordesenhas.ui.site.CadastroSiteActivity;
 import com.project.silas.gerenciadordesenhas.ui.utils.RecyclerItemClickListener;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -279,8 +275,8 @@ public class TelaPrincipalActivity extends AppCompatActivity {
 
                 Log.i("telaPrincipalActivity", "Total de Sites: " + adaptador.getItemCount());
 
-                Intent intent = new Intent(TelaPrincipalActivity.this, SitesInfoActivity.class);
-                intent.putExtra(SitesInfoActivity.CHAVE_INTENT_TOTALSITES, adaptador.getItemCount());
+                Intent intent = new Intent(TelaPrincipalActivity.this, TelaPrincipalInfoActivity.class);
+                intent.putExtra(TelaPrincipalInfoActivity.CHAVE_INTENT_TOTALSITES, adaptador.getItemCount());
                 startActivity(intent);
 
                 return false;
